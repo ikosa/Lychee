@@ -47,6 +47,10 @@ class Cast
 			'sysdate' => $photo->created_at->format('d F Y'),
 			'takedate' => isset($photo->takestamp) ? $photo->takestamp->format('d F Y \a\t H:i') : '',
 			'license' => $photo->license,
+			
+			// added ****************************************************************
+			'rawUrl' => $photo->rawUrl,
+			// ********************************************************************** added end
 		];
 	}
 
