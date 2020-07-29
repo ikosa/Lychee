@@ -17,7 +17,7 @@ d.init=function(){var a=d(u),b;for(b in a)"_"!==b.charAt(0)&&(d[b]=function(b){r
 
 (function(a){var c={},d=a.prototype.stopCallback;a.prototype.stopCallback=function(e,b,a,f){return this.paused?!0:c[a]||c[f]?!1:d.call(this,e,b,a)};a.prototype.bindGlobal=function(a,b,d){this.bind(a,b,d);if(a instanceof Array)for(b=0;b<a.length;b++)c[a[b]]=!0;else c[a]=!0};a.init()})(Mousetrap);
 
-!function(n){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=n();else if("function"==typeof define&&define.amd)define([],n);else{var t;t="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this,t.basicModal=n()}}(function(){return function n(t,e,o){function l(c,s){if(!e[c]){if(!t[c]){var i="function"==typeof require&&require;if(!s&&i)return i(c,!0);if(a)return a(c,!0);var r=new Error("Cannot find module '"+c+"'");throw r.code="MODULE_NOT_FOUND",r}var u=e[c]={exports:{}};t[c][0].call(u.exports,function(n){var e=t[c][1][n];return l(e||n)},u,u.exports,n,t,e,o)}return e[c].exports}for(var a="function"==typeof require&&require,c=0;c<o.length;c++)l(o[c]);return l}({1:[function(n,t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=null,l=(e.THEME={small:"basicModal__small",xclose:"basicModal__xclose"},function(){var n=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"";return!0===(arguments.length>1&&void 0!==arguments[1]&&arguments[1])?document.querySelectorAll(".basicModal "+n):document.querySelector(".basicModal "+n)}),a=function(n,t){return null!=n&&(n.constructor===Object?Array.prototype.forEach.call(Object.keys(n),function(e){return t(n[e],e,n)}):Array.prototype.forEach.call(n,function(e,o){return t(e,o,n)}))},c=function(n){return null==n||0===Object.keys(n).length?(console.error("Missing or empty modal configuration object"),!1):(null==n.body&&(n.body=""),null==n.class&&(n.class=""),!1!==n.closable&&(n.closable=!0),null==n.buttons?(console.error("basicModal requires at least one button"),!1):null!=n.buttons.action&&(null==n.buttons.action.class&&(n.buttons.action.class=""),null==n.buttons.action.title&&(n.buttons.action.title="OK"),null==n.buttons.action.fn)?(console.error("Missing fn for action-button"),!1):null==n.buttons.cancel||(null==n.buttons.cancel.class&&(n.buttons.cancel.class=""),null==n.buttons.cancel.title&&(n.buttons.cancel.title="Cancel"),null!=n.buttons.cancel.fn)||(console.error("Missing fn for cancel-button"),!1))},s=function(n){var t="";return t+="\n\t        <div class='basicModalContainer basicModalContainer--fadeIn' data-closable='"+n.closable+"'>\n\t            <div class='basicModal basicModal--fadeIn "+n.class+"' role=\"dialog\">\n\t                <div class='basicModal__content'>\n\t                    "+n.body+"\n\t                </div>\n\t                <div class='basicModal__buttons'>\n\t        ",null!=n.buttons.cancel&&(-1===n.buttons.cancel.class.indexOf("basicModal__xclose")?t+="<a id='basicModal__cancel' class='basicModal__button "+n.buttons.cancel.class+"'>"+n.buttons.cancel.title+"</a>":t+="<div id='basicModal__cancel' class='basicModal__button "+n.buttons.cancel.class+'\' aria-label=\'close\'><svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><path d="M405 136.798l-29.798-29.798-119.202 119.202-119.202-119.202-29.798 29.798 119.202 119.202-119.202 119.202 29.798 29.798 119.202-119.202 119.202 119.202 29.798-29.798-119.202-119.202z"/></svg></div>'),null!=n.buttons.action&&(t+="<a id='basicModal__action' class='basicModal__button "+n.buttons.action.class+"'>"+n.buttons.action.title+"</a>"),t+="\n\t                </div>\n\t            </div>\n\t        </div>\n\t        "},i=e.getValues=function(){var n={},t=l("input[name]",!0),e=l("select[name]",!0);return a(t,function(t){var e=t.getAttribute("name"),o=t.value;n[e]=o}),a(e,function(t){var e=t.getAttribute("name"),o=t.options[t.selectedIndex].value;n[e]=o}),0===Object.keys(n).length?null:n},r=function(n){return null!=n.buttons.cancel&&(l("#basicModal__cancel").onclick=function(){if(!0===this.classList.contains("basicModal__button--active"))return!1;this.classList.add("basicModal__button--active"),n.buttons.cancel.fn()}),null!=n.buttons.action&&(l("#basicModal__action").onclick=function(){if(!0===this.classList.contains("basicModal__button--active"))return!1;this.classList.add("basicModal__button--active"),n.buttons.action.fn(i())}),a(l("input",!0),function(n){n.oninput=n.onblur=function(){this.classList.remove("error")}}),a(l("select",!0),function(n){n.onchange=n.onblur=function(){this.classList.remove("error")}}),!0},u=(e.show=function n(t){if(!1===c(t))return!1;if(null!=l())return b(!0),setTimeout(function(){return n(t)},301),!1;o=document.activeElement;var e=s(t);document.body.insertAdjacentHTML("beforeend",e),r(t);var a=l("input");null!=a&&a.select();var i=l("select");return null==a&&null!=i&&i.focus(),null!=t.callback&&t.callback(t),!0},e.error=function(n){d();var t=l("input[name='"+n+"']")||l("select[name='"+n+"']");if(null==t)return!1;t.classList.add("error"),"function"==typeof t.select?t.select():t.focus(),l().classList.remove("basicModal--fadeIn","basicModal--shake"),setTimeout(function(){return l().classList.add("basicModal--shake")},1)},e.visible=function(){return null!=l()}),d=(e.action=function(){var n=l("#basicModal__action");return null!=n&&(n.click(),!0)},e.cancel=function(){var n=l("#basicModal__cancel");return null!=n&&(n.click(),!0)},e.reset=function(){var n=l(".basicModal__button",!0);a(n,function(n){return n.classList.remove("basicModal__button--active")});var t=l("input",!0);a(t,function(n){return n.classList.remove("error")});var e=l("select",!0);return a(e,function(n){return n.classList.remove("error")}),!0}),b=e.close=function(){var n=arguments.length>0&&void 0!==arguments[0]&&arguments[0];if(!1===u())return!1;var t=l().parentElement;return("false"!==t.getAttribute("data-closable")||!1!==n)&&(t.classList.remove("basicModalContainer--fadeIn"),t.classList.add("basicModalContainer--fadeOut"),setTimeout(function(){return null!=t&&(null!=t.parentElement&&void t.parentElement.removeChild(t))},300),null!=o&&(o.focus(),o=null),!0)}},{}]},{},[1])(1)});
+!function(t){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var n;n="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this,n.basicModal=t()}}(function(){return function(){function t(n,e,l){function o(c,s){if(!e[c]){if(!n[c]){var i="function"==typeof require&&require;if(!s&&i)return i(c,!0);if(a)return a(c,!0);var u=new Error("Cannot find module '"+c+"'");throw u.code="MODULE_NOT_FOUND",u}var r=e[c]={exports:{}};n[c][0].call(r.exports,function(t){return o(n[c][1][t]||t)},r,r.exports,t,n,e,l)}return e[c].exports}for(var a="function"==typeof require&&require,c=0;c<l.length;c++)o(l[c]);return o}return t}()({1:[function(t,n,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var l=null,o=(e.THEME={small:"basicModal__small",xclose:"basicModal__xclose"},e.dom=function(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"";return!0===(arguments.length>1&&void 0!==arguments[1]&&arguments[1])?document.querySelectorAll(".basicModal "+t):document.querySelector(".basicModal "+t)}),a=function(t,n){return null!=t&&(t.constructor===Object?Array.prototype.forEach.call(Object.keys(t),function(e){return n(t[e],e,t)}):Array.prototype.forEach.call(t,function(e,l){return n(e,l,t)}))},c=function(t){return null==t||0===Object.keys(t).length?(console.error("Missing or empty modal configuration object"),!1):(null==t.body&&(t.body=""),null==t.class&&(t.class=""),!1!==t.closable&&(t.closable=!0),null==t.buttons?(console.error("basicModal requires at least one button"),!1):null!=t.buttons.action&&(null==t.buttons.action.class&&(t.buttons.action.class=""),null==t.buttons.action.title&&(t.buttons.action.title="OK"),null==t.buttons.action.fn)?(console.error("Missing fn for action-button"),!1):null==t.buttons.cancel||(null==t.buttons.cancel.class&&(t.buttons.cancel.class=""),null==t.buttons.cancel.title&&(t.buttons.cancel.title="Cancel"),null!=t.buttons.cancel.fn)||(console.error("Missing fn for cancel-button"),!1))},s=function(t){var n="";if(n+="\n\t        <div class='basicModalContainer basicModalContainer--fadeIn' data-closable='"+t.closable+"'>\n\t            <div class='basicModal basicModal--fadeIn "+t.class+"' role=\"dialog\">\n\t                <div class='basicModal__content'>\n\t                    "+t.body+"\n\t                </div>\n\t                <div class='basicModal__buttons'>\n\t        ",null!=t.buttons.cancel){var e="";null!=t.buttons.cancel.attributes&&t.buttons.cancel.attributes.forEach(function(t,n){e+=t[0]+"='"+t[1]+"' "}),-1===t.buttons.cancel.class.indexOf("basicModal__xclose")?n+="<a id='basicModal__cancel' class='basicModal__button "+t.buttons.cancel.class+"' "+e+" >"+t.buttons.cancel.title+"</a>":n+="<div id='basicModal__cancel' class='basicModal__button "+t.buttons.cancel.class+"' aria-label='close' "+e+' ><svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><path d="M405 136.798l-29.798-29.798-119.202 119.202-119.202-119.202-29.798 29.798 119.202 119.202-119.202 119.202 29.798 29.798 119.202-119.202 119.202 119.202 29.798-29.798-119.202-119.202z"/></svg></div>'}if(null!=t.buttons.action){var l="";null!=t.buttons.action.attributes&&t.buttons.action.attributes.forEach(function(t,n){l+=t[0]+"='"+t[1]+"' "}),n+="<a id='basicModal__action' class='basicModal__button "+t.buttons.action.class+"' "+l+">"+t.buttons.action.title+"</a>"}return n+="\n\t                </div>\n\t            </div>\n\t        </div>\n\t        "},i=e.getValues=function(){var t={},n=o("input[name]",!0),e=o("select[name]",!0);return a(n,function(n){var e=n.getAttribute("name"),l=n.value;t[e]=l}),a(e,function(n){var e=n.getAttribute("name"),l=n.options[n.selectedIndex].value;t[e]=l}),0===Object.keys(t).length?null:t},u=function(t){return null!=t.buttons.cancel&&(o("#basicModal__cancel").onclick=function(){if(!0===this.classList.contains("basicModal__button--active"))return!1;this.classList.add("basicModal__button--active"),t.buttons.cancel.fn()}),null!=t.buttons.action&&(o("#basicModal__action").onclick=function(){if(!0===this.classList.contains("basicModal__button--active"))return!1;this.classList.add("basicModal__button--active"),t.buttons.action.fn(i())}),a(o("input",!0),function(t){t.oninput=t.onblur=function(){this.classList.remove("error")}}),a(o("select",!0),function(t){t.onchange=t.onblur=function(){this.classList.remove("error")}}),!0},r=(e.show=function t(n){if(!1===c(n))return!1;if(null!=o())return d(!0),setTimeout(function(){return t(n)},301),!1;l=document.activeElement;var e=s(n);document.body.insertAdjacentHTML("beforeend",e),u(n);var a=o("input");null!=a&&a.select();var i=o("select");null==a&&null!=i&&i.focus();var r=o("#basicModal__action");null==a&&null==i&&null!=r&&r.focus();var b=o("#basicModal__cancel");return null==a&&null==i&&null==r&&null!=b&&b.focus(),null!=n.callback&&n.callback(n),!0},e.error=function(t){b();var n=o("input[name='"+t+"']")||o("select[name='"+t+"']");if(null==n)return!1;n.classList.add("error"),"function"==typeof n.select?n.select():n.focus(),o().classList.remove("basicModal--fadeIn","basicModal--shake"),setTimeout(function(){return o().classList.add("basicModal--shake")},1)},e.visible=function(){return null!=o()}),b=(e.action=function(){var t=o("#basicModal__action");return null!=t&&(t.click(),!0)},e.cancel=function(){var t=o("#basicModal__cancel");return null!=t&&(t.click(),!0)},e.reset=function(){var t=o(".basicModal__button",!0);a(t,function(t){return t.classList.remove("basicModal__button--active")});var n=o("input",!0);a(n,function(t){return t.classList.remove("error")});var e=o("select",!0);return a(e,function(t){return t.classList.remove("error")}),!0}),d=e.close=function(){var t=arguments.length>0&&void 0!==arguments[0]&&arguments[0];if(!1===r())return!1;var n=o().parentElement;return("false"!==n.getAttribute("data-closable")||!1!==t)&&(n.classList.remove("basicModalContainer--fadeIn"),n.classList.add("basicModalContainer--fadeOut"),setTimeout(function(){return null!=n&&(null!=n.parentElement&&void n.parentElement.removeChild(n))},300),null!=l&&(l.focus(),l=null),!0)}},{}]},{},[1])(1)});
 !function(e,t){"object"==typeof exports&&"object"==typeof module?module.exports=t():"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?exports.scrollLock=t():e.scrollLock=t()}(this,function(){return function(l){var r={};function o(e){if(r[e])return r[e].exports;var t=r[e]={i:e,l:!1,exports:{}};return l[e].call(t.exports,t,t.exports,o),t.l=!0,t.exports}return o.m=l,o.c=r,o.d=function(e,t,l){o.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:l})},o.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},o.t=function(t,e){if(1&e&&(t=o(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var l=Object.create(null);if(o.r(l),Object.defineProperty(l,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var r in t)o.d(l,r,function(e){return t[e]}.bind(null,r));return l},o.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return o.d(t,"a",t),t},o.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},o.p="",o(o.s=0)}([function(e,t,l){"use strict";l.r(t);var r=function(e){return Array.isArray(e)?e:[e]},a=function(e){return e instanceof Node},o=function(e,t){if(e&&t){e=e instanceof NodeList?e:[e];for(var l=0;l<e.length&&!0!==t(e[l],l,e.length);l++);}},n=function(e){return console.error("[scroll-lock] ".concat(e))},b=function(e){if(Array.isArray(e))return e.join(", ")},c=function(e){var t=[];return o(e,function(e){return t.push(e)}),t},h=function(e,t){var l=!(2<arguments.length&&void 0!==arguments[2])||arguments[2],r=3<arguments.length&&void 0!==arguments[3]?arguments[3]:document;if(l&&-1!==c(r.querySelectorAll(t)).indexOf(e))return e;for(;(e=e.parentElement)&&-1===c(r.querySelectorAll(t)).indexOf(e););return e},v=function(e,t){var l=2<arguments.length&&void 0!==arguments[2]?arguments[2]:document;return-1!==c(l.querySelectorAll(t)).indexOf(e)},i=function(e){if(e)return"hidden"===getComputedStyle(e).overflow},m=function(e){if(e)return!!i(e)||e.scrollTop<=0},S=function(e){if(e){if(i(e))return!0;var t=e.scrollTop;return e.scrollHeight<=t+e.offsetHeight}},y=function(e){if(e)return!!i(e)||e.scrollLeft<=0},k=function(e){if(e){if(i(e))return!0;var t=e.scrollLeft;return e.scrollWidth<=t+e.offsetWidth}};l.d(t,"disablePageScroll",function(){return d}),l.d(t,"enablePageScroll",function(){return s}),l.d(t,"getScrollState",function(){return f}),l.d(t,"clearQueueScrollLocks",function(){return p}),l.d(t,"getTargetScrollBarWidth",function(){return g}),l.d(t,"getCurrentTargetScrollBarWidth",function(){return A}),l.d(t,"getPageScrollBarWidth",function(){return G}),l.d(t,"getCurrentPageScrollBarWidth",function(){return T}),l.d(t,"addScrollableTarget",function(){return L}),l.d(t,"removeScrollableTarget",function(){return W}),l.d(t,"addScrollableSelector",function(){return x}),l.d(t,"removeScrollableSelector",function(){return F}),l.d(t,"addLockableTarget",function(){return Y}),l.d(t,"addLockableSelector",function(){return E}),l.d(t,"setFillGapMethod",function(){return O}),l.d(t,"addFillGapTarget",function(){return P}),l.d(t,"removeFillGapTarget",function(){return j}),l.d(t,"addFillGapSelector",function(){return q}),l.d(t,"removeFillGapSelector",function(){return M}),l.d(t,"refillGaps",function(){return N});var u=["padding","margin","width","max-width","none"],w={scroll:!0,queue:0,scrollableSelectors:["[data-scroll-lock-scrollable]"],lockableSelectors:["body","[data-scroll-lock-lockable]"],fillGapSelectors:["body","[data-scroll-lock-fill-gap]","[data-scroll-lock-lockable]"],fillGapMethod:u[0],startTouchY:0,startTouchX:0},d=function(e){w.queue<=0&&(w.scroll=!1,B(),X()),L(e),w.queue++},s=function(e){0<w.queue&&w.queue--,w.queue<=0&&(w.scroll=!0,C(),Q()),W(e)},f=function(){return w.scroll},p=function(){w.queue=0},g=function(e){var t=1<arguments.length&&void 0!==arguments[1]&&arguments[1];if(a(e)){var l=e.style.overflowY;t?f()||(e.style.overflowY=e.getAttribute("data-scroll-lock-saved-overflow-y-property")):e.style.overflowY="scroll";var r=A(e);return e.style.overflowY=l,r}return 0},A=function(e){if(a(e)){if(e===document.body){var t=document.documentElement.clientWidth;return window.innerWidth-t}var l=e.style.borderLeftWidth,r=e.style.borderRightWidth;e.style.borderLeftWidth="0px",e.style.borderRightWidth="0px";var o=e.offsetWidth-e.clientWidth;return e.style.borderLeftWidth=l,e.style.borderRightWidth=r,o}return 0},G=function(){var e=0<arguments.length&&void 0!==arguments[0]&&arguments[0];return g(document.body,e)},T=function(){return A(document.body)},L=function(e){e&&r(e).map(function(e){o(e,function(e){a(e)?e.setAttribute("data-scroll-lock-scrollable",""):n('"'.concat(e,'" is not a Element.'))})})},W=function(e){e&&r(e).map(function(e){o(e,function(e){a(e)?e.removeAttribute("data-scroll-lock-scrollable"):n('"'.concat(e,'" is not a Element.'))})})},x=function(e){e&&r(e).map(function(e){w.scrollableSelectors.push(e)})},F=function(e){e&&r(e).map(function(t){w.scrollableSelectors=w.scrollableSelectors.filter(function(e){return e!==t})})},Y=function(e){e&&(r(e).map(function(e){o(e,function(e){a(e)?e.setAttribute("data-scroll-lock-lockable",""):n('"'.concat(e,'" is not a Element.'))})}),f()||B())},E=function(e){e&&(r(e).map(function(e){w.lockableSelectors.push(e)}),f()||B(),q(e))},O=function(e){if(e)if(-1!==u.indexOf(e))w.fillGapMethod=e,N();else{var t=u.join(", ");n('"'.concat(e,'" method is not available!\nAvailable fill gap methods: ').concat(t,"."))}},P=function(e){e&&r(e).map(function(e){o(e,function(e){a(e)?(e.setAttribute("data-scroll-lock-fill-gap",""),w.scroll||H(e)):n('"'.concat(e,'" is not a Element.'))})})},j=function(e){e&&r(e).map(function(e){o(e,function(e){a(e)?(e.removeAttribute("data-scroll-lock-fill-gap"),w.scroll||I(e)):n('"'.concat(e,'" is not a Element.'))})})},q=function(e){e&&r(e).map(function(e){-1===w.fillGapSelectors.indexOf(e)&&(w.fillGapSelectors.push(e),w.scroll||D(e))})},M=function(e){e&&r(e).map(function(t){w.fillGapSelectors=w.fillGapSelectors.filter(function(e){return e!==t}),w.scroll||z(t)})},N=function(){w.scroll||X()},B=function(){var e=b(w.lockableSelectors);K(e)},C=function(){var e=b(w.lockableSelectors);R(e)},K=function(e){var t=document.querySelectorAll(e);o(t,function(e){U(e)})},R=function(e){var t=document.querySelectorAll(e);o(t,function(e){_(e)})},U=function(e){if(a(e)&&"true"!==e.getAttribute("data-scroll-lock-locked")){var t=window.getComputedStyle(e);e.setAttribute("data-scroll-lock-saved-overflow-y-property",t.overflowY),e.setAttribute("data-scroll-lock-saved-inline-overflow-property",e.style.overflow),e.setAttribute("data-scroll-lock-saved-inline-overflow-y-property",e.style.overflowY),e.style.overflow="hidden",e.setAttribute("data-scroll-lock-locked","true")}},_=function(e){a(e)&&"true"===e.getAttribute("data-scroll-lock-locked")&&(e.style.overflow=e.getAttribute("data-scroll-lock-saved-inline-overflow-property"),e.style.overflowY=e.getAttribute("data-scroll-lock-saved-inline-overflow-y-property"),e.removeAttribute("data-scroll-lock-saved-overflow-property"),e.removeAttribute("data-scroll-lock-saved-inline-overflow-property"),e.removeAttribute("data-scroll-lock-saved-inline-overflow-y-property"),e.removeAttribute("data-scroll-lock-locked"))},X=function(){w.fillGapSelectors.map(function(e){D(e)})},Q=function(){w.fillGapSelectors.map(function(e){z(e)})},D=function(e){var t=document.querySelectorAll(e),l=-1!==w.lockableSelectors.indexOf(e);o(t,function(e){H(e,l)})},H=function(e){var t=1<arguments.length&&void 0!==arguments[1]&&arguments[1];if(a(e)){var l;if(""===e.getAttribute("data-scroll-lock-lockable")||t)l=g(e,!0);else{var r=h(e,b(w.lockableSelectors));l=g(r,!0)}"true"===e.getAttribute("data-scroll-lock-filled-gap")&&I(e);var o=window.getComputedStyle(e);if(e.setAttribute("data-scroll-lock-filled-gap","true"),e.setAttribute("data-scroll-lock-current-fill-gap-method",w.fillGapMethod),"margin"===w.fillGapMethod){var n=parseFloat(o.marginRight);e.style.marginRight="".concat(n+l,"px")}else if("width"===w.fillGapMethod)e.style.width="calc(100% - ".concat(l,"px)");else if("max-width"===w.fillGapMethod)e.style.maxWidth="calc(100% - ".concat(l,"px)");else if("padding"===w.fillGapMethod){var c=parseFloat(o.paddingRight);e.style.paddingRight="".concat(c+l,"px")}}},z=function(e){var t=document.querySelectorAll(e);o(t,function(e){I(e)})},I=function(e){if(a(e)&&"true"===e.getAttribute("data-scroll-lock-filled-gap")){var t=e.getAttribute("data-scroll-lock-current-fill-gap-method");e.removeAttribute("data-scroll-lock-filled-gap"),e.removeAttribute("data-scroll-lock-current-fill-gap-method"),"margin"===t?e.style.marginRight="":"width"===t?e.style.width="":"max-width"===t?e.style.maxWidth="":"padding"===t&&(e.style.paddingRight="")}};"undefined"!=typeof window&&window.addEventListener("resize",function(e){N()}),"undefined"!=typeof document&&(document.addEventListener("touchstart",function(e){w.scroll||(w.startTouchY=e.touches[0].clientY,w.startTouchX=e.touches[0].clientX)}),document.addEventListener("touchmove",function(n){if(!w.scroll){var e=w.startTouchY,t=w.startTouchX,l=n.touches[0].clientY,r=n.touches[0].clientX;if(n.touches.length<2){var c=b(w.scrollableSelectors),a=e<l,i=l<e,u=t<r,d=r<t,s=e+3<l,f=l<e-3,p=t+3<r,g=r<t-3;!function e(t){var l=1<arguments.length&&void 0!==arguments[1]&&arguments[1];if(t){var r=h(t,c,!1);if(v(t,'input[type="range"]'))return!1;if(l||v(t,'textarea, [contenteditable="true"]')&&h(t,c)||v(t,c)){var o=!1;y(t)&&k(t)?(a&&m(t)||i&&S(t))&&(o=!0):m(t)&&S(t)?(u&&y(t)||d&&k(t))&&(o=!0):(s&&m(t)||f&&S(t)||p&&y(t)||g&&k(t))&&(o=!0),o&&(r?e(r,!0):n.preventDefault())}else e(r)}else n.preventDefault()}(n.target)}}},{passive:!1}),document.addEventListener("touchend",function(e){w.scroll||(w.startTouchY=0,w.startTouchX=0)}));var J={hide:function(e){n('"hide" is deprecated! Use "disablePageScroll" instead. \n https://github.com/FL3NKEY/scroll-lock#disablepagescrollscrollabletarget'),d(e)},show:function(e){n('"show" is deprecated! Use "enablePageScroll" instead. \n https://github.com/FL3NKEY/scroll-lock#enablepagescrollscrollabletarget'),s(e)},toggle:function(e){n('"toggle" is deprecated! Do not use it.'),f()?d():s(e)},getState:function(){return n('"getState" is deprecated! Use "getScrollState" instead. \n https://github.com/FL3NKEY/scroll-lock#getscrollstate'),f()},getWidth:function(){return n('"getWidth" is deprecated! Use "getPageScrollBarWidth" instead. \n https://github.com/FL3NKEY/scroll-lock#getpagescrollbarwidth'),G()},getCurrentWidth:function(){return n('"getCurrentWidth" is deprecated! Use "getCurrentPageScrollBarWidth" instead. \n https://github.com/FL3NKEY/scroll-lock#getcurrentpagescrollbarwidth'),T()},setScrollableTargets:function(e){n('"setScrollableTargets" is deprecated! Use "addScrollableTarget" instead. \n https://github.com/FL3NKEY/scroll-lock#addscrollabletargetscrollabletarget'),L(e)},setFillGapSelectors:function(e){n('"setFillGapSelectors" is deprecated! Use "addFillGapSelector" instead. \n https://github.com/FL3NKEY/scroll-lock#addfillgapselectorfillgapselector'),q(e)},setFillGapTargets:function(e){n('"setFillGapTargets" is deprecated! Use "addFillGapTarget" instead. \n https://github.com/FL3NKEY/scroll-lock#addfillgaptargetfillgaptarget'),P(e)},clearQueue:function(){n('"clearQueue" is deprecated! Use "clearQueueScrollLocks" instead. \n https://github.com/FL3NKEY/scroll-lock#clearqueuescrolllocks'),p()}},V=function(o){for(var e=1;e<arguments.length;e++){var n=null!=arguments[e]?arguments[e]:{},t=Object.keys(n);"function"==typeof Object.getOwnPropertySymbols&&(t=t.concat(Object.getOwnPropertySymbols(n).filter(function(e){return Object.getOwnPropertyDescriptor(n,e).enumerable}))),t.forEach(function(e){var t,l,r;t=o,r=n[l=e],l in t?Object.defineProperty(t,l,{value:r,enumerable:!0,configurable:!0,writable:!0}):t[l]=r})}return o}({disablePageScroll:d,enablePageScroll:s,getScrollState:f,clearQueueScrollLocks:p,getTargetScrollBarWidth:g,getCurrentTargetScrollBarWidth:A,getPageScrollBarWidth:G,getCurrentPageScrollBarWidth:T,addScrollableSelector:x,removeScrollableSelector:F,addScrollableTarget:L,removeScrollableTarget:W,addLockableSelector:E,addLockableTarget:Y,addFillGapSelector:q,removeFillGapSelector:M,addFillGapTarget:P,removeFillGapTarget:j,setFillGapMethod:O,refillGaps:N,_state:w},J);t.default=V}]).default});
 /*
  * @license
@@ -271,7 +271,7 @@ var _templateObject = _taggedTemplateLiteral(["<p>", " <input class='text' name=
     _templateObject3 = _taggedTemplateLiteral(["<p>", " ", "</p>"], ["<p>", " ", "</p>"]),
     _templateObject4 = _taggedTemplateLiteral(["<p>", " $", " ", " ", "</p>"], ["<p>", " $", " ", " ", "</p>"]),
     _templateObject5 = _taggedTemplateLiteral(["<p>", "<input class='text' name='description' type='text' maxlength='800' placeholder='$", "' value='$", "'></p>"], ["<p>", "<input class='text' name='description' type='text' maxlength='800' placeholder='$", "' value='$", "'></p>"]),
-    _templateObject6 = _taggedTemplateLiteral(["\n\t<div>\n\t\t<p>", "\n\t\t<span class=\"select\" style=\"width:270px\">\n\t\t\t<select name=\"license\" id=\"license\">\n\t\t\t\t<option value=\"none\">", "</option>\n\t\t\t\t<option value=\"reserved\">", "</option>\n\t\t\t\t<option value=\"CC0\">CC0 - Public Domain</option>\n\t\t\t\t<option value=\"CC-BY\">CC Attribution 4.0</option>\n\t\t\t\t<option value=\"CC-BY-ND\">CC Attribution-NoDerivatives 4.0</option>\n\t\t\t\t<option value=\"CC-BY-SA\">CC Attribution-ShareAlike 4.0</option>\n\t\t\t\t<option value=\"CC-BY-NC\">CC Attribution-NonCommercial 4.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-ND\">CC Attribution-NonCommercial-NoDerivatives 4.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-SA\">CC Attribution-NonCommercial-ShareAlike 4.0</option>\n\t\t\t</select>\n\t\t</span>\n\t\t<br />\n\t\t<a href=\"https://creativecommons.org/choose/\" target=\"_blank\">", "</a>\n\t\t</p>\n\t</div>"], ["\n\t<div>\n\t\t<p>", "\n\t\t<span class=\"select\" style=\"width:270px\">\n\t\t\t<select name=\"license\" id=\"license\">\n\t\t\t\t<option value=\"none\">", "</option>\n\t\t\t\t<option value=\"reserved\">", "</option>\n\t\t\t\t<option value=\"CC0\">CC0 - Public Domain</option>\n\t\t\t\t<option value=\"CC-BY\">CC Attribution 4.0</option>\n\t\t\t\t<option value=\"CC-BY-ND\">CC Attribution-NoDerivatives 4.0</option>\n\t\t\t\t<option value=\"CC-BY-SA\">CC Attribution-ShareAlike 4.0</option>\n\t\t\t\t<option value=\"CC-BY-NC\">CC Attribution-NonCommercial 4.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-ND\">CC Attribution-NonCommercial-NoDerivatives 4.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-SA\">CC Attribution-NonCommercial-ShareAlike 4.0</option>\n\t\t\t</select>\n\t\t</span>\n\t\t<br />\n\t\t<a href=\"https://creativecommons.org/choose/\" target=\"_blank\">", "</a>\n\t\t</p>\n\t</div>"]),
+    _templateObject6 = _taggedTemplateLiteral(["\n\t<div>\n\t\t<p>", "\n\t\t<span class=\"select\" style=\"width:270px\">\n\t\t\t<select name=\"license\" id=\"license\">\n\t\t\t\t<option value=\"none\">", "</option>\n\t\t\t\t<option value=\"reserved\">", "</option>\n\t\t\t\t<option value=\"CC0\">CC0 - Public Domain</option>\n\t\t\t\t<option value=\"CC-BY-1.0\">CC Attribution 1.0</option>\n\t\t\t\t<option value=\"CC-BY-2.0\">CC Attribution 2.0</option>\n\t\t\t\t<option value=\"CC-BY-2.5\">CC Attribution 2.5</option>\n\t\t\t\t<option value=\"CC-BY-3.0\">CC Attribution 3.0</option>\n\t\t\t\t<option value=\"CC-BY-4.0\">CC Attribution 4.0</option>\n\t\t\t\t<option value=\"CC-BY-ND-1.0\">CC Attribution-NoDerivatives 1.0</option>\n\t\t\t\t<option value=\"CC-BY-ND-2.0\">CC Attribution-NoDerivatives 2.0</option>\n\t\t\t\t<option value=\"CC-BY-ND-2.5\">CC Attribution-NoDerivatives 2.5</option>\n\t\t\t\t<option value=\"CC-BY-ND-3.0\">CC Attribution-NoDerivatives 3.0</option>\n\t\t\t\t<option value=\"CC-BY-ND-4.0\">CC Attribution-NoDerivatives 4.0</option>\n\t\t\t\t<option value=\"CC-BY-SA-1.0\">CC Attribution-ShareAlike 1.0</option>\n\t\t\t\t<option value=\"CC-BY-SA-2.0\">CC Attribution-ShareAlike 2.0</option>\n\t\t\t\t<option value=\"CC-BY-SA-2.5\">CC Attribution-ShareAlike 2.5</option>\n\t\t\t\t<option value=\"CC-BY-SA-3.0\">CC Attribution-ShareAlike 3.0</option>\n\t\t\t\t<option value=\"CC-BY-SA-4.0\">CC Attribution-ShareAlike 4.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-1.0\">CC Attribution-NonCommercial 1.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-2.0\">CC Attribution-NonCommercial 2.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-2.5\">CC Attribution-NonCommercial 2.5</option>\n\t\t\t\t<option value=\"CC-BY-NC-3.0\">CC Attribution-NonCommercial 3.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-4.0\">CC Attribution-NonCommercial 4.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-ND-1.0\">CC Attribution-NonCommercial-NoDerivatives 1.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-ND-2.0\">CC Attribution-NonCommercial-NoDerivatives 2.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-ND-2.5\">CC Attribution-NonCommercial-NoDerivatives 2.5</option>\n\t\t\t\t<option value=\"CC-BY-NC-ND-3.0\">CC Attribution-NonCommercial-NoDerivatives 3.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-ND-4.0\">CC Attribution-NonCommercial-NoDerivatives 4.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-SA-1.0\">CC Attribution-NonCommercial-ShareAlike 1.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-SA-2.0\">CC Attribution-NonCommercial-ShareAlike 2.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-SA-2.5\">CC Attribution-NonCommercial-ShareAlike 2.5</option>\n\t\t\t\t<option value=\"CC-BY-NC-SA-3.0\">CC Attribution-NonCommercial-ShareAlike 3.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-SA-4.0\">CC Attribution-NonCommercial-ShareAlike 4.0</option>\n\t\t\t</select>\n\t\t</span>\n\t\t<br />\n\t\t<a href=\"https://creativecommons.org/choose/\" target=\"_blank\">", "</a>\n\t\t</p>\n\t</div>"], ["\n\t<div>\n\t\t<p>", "\n\t\t<span class=\"select\" style=\"width:270px\">\n\t\t\t<select name=\"license\" id=\"license\">\n\t\t\t\t<option value=\"none\">", "</option>\n\t\t\t\t<option value=\"reserved\">", "</option>\n\t\t\t\t<option value=\"CC0\">CC0 - Public Domain</option>\n\t\t\t\t<option value=\"CC-BY-1.0\">CC Attribution 1.0</option>\n\t\t\t\t<option value=\"CC-BY-2.0\">CC Attribution 2.0</option>\n\t\t\t\t<option value=\"CC-BY-2.5\">CC Attribution 2.5</option>\n\t\t\t\t<option value=\"CC-BY-3.0\">CC Attribution 3.0</option>\n\t\t\t\t<option value=\"CC-BY-4.0\">CC Attribution 4.0</option>\n\t\t\t\t<option value=\"CC-BY-ND-1.0\">CC Attribution-NoDerivatives 1.0</option>\n\t\t\t\t<option value=\"CC-BY-ND-2.0\">CC Attribution-NoDerivatives 2.0</option>\n\t\t\t\t<option value=\"CC-BY-ND-2.5\">CC Attribution-NoDerivatives 2.5</option>\n\t\t\t\t<option value=\"CC-BY-ND-3.0\">CC Attribution-NoDerivatives 3.0</option>\n\t\t\t\t<option value=\"CC-BY-ND-4.0\">CC Attribution-NoDerivatives 4.0</option>\n\t\t\t\t<option value=\"CC-BY-SA-1.0\">CC Attribution-ShareAlike 1.0</option>\n\t\t\t\t<option value=\"CC-BY-SA-2.0\">CC Attribution-ShareAlike 2.0</option>\n\t\t\t\t<option value=\"CC-BY-SA-2.5\">CC Attribution-ShareAlike 2.5</option>\n\t\t\t\t<option value=\"CC-BY-SA-3.0\">CC Attribution-ShareAlike 3.0</option>\n\t\t\t\t<option value=\"CC-BY-SA-4.0\">CC Attribution-ShareAlike 4.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-1.0\">CC Attribution-NonCommercial 1.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-2.0\">CC Attribution-NonCommercial 2.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-2.5\">CC Attribution-NonCommercial 2.5</option>\n\t\t\t\t<option value=\"CC-BY-NC-3.0\">CC Attribution-NonCommercial 3.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-4.0\">CC Attribution-NonCommercial 4.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-ND-1.0\">CC Attribution-NonCommercial-NoDerivatives 1.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-ND-2.0\">CC Attribution-NonCommercial-NoDerivatives 2.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-ND-2.5\">CC Attribution-NonCommercial-NoDerivatives 2.5</option>\n\t\t\t\t<option value=\"CC-BY-NC-ND-3.0\">CC Attribution-NonCommercial-NoDerivatives 3.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-ND-4.0\">CC Attribution-NonCommercial-NoDerivatives 4.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-SA-1.0\">CC Attribution-NonCommercial-ShareAlike 1.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-SA-2.0\">CC Attribution-NonCommercial-ShareAlike 2.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-SA-2.5\">CC Attribution-NonCommercial-ShareAlike 2.5</option>\n\t\t\t\t<option value=\"CC-BY-NC-SA-3.0\">CC Attribution-NonCommercial-ShareAlike 3.0</option>\n\t\t\t\t<option value=\"CC-BY-NC-SA-4.0\">CC Attribution-NonCommercial-ShareAlike 4.0</option>\n\t\t\t</select>\n\t\t</span>\n\t\t<br />\n\t\t<a href=\"https://creativecommons.org/choose/\" target=\"_blank\">", "</a>\n\t\t</p>\n\t</div>"]),
     _templateObject7 = _taggedTemplateLiteral(["\n\t\t\t<form>\n\t\t\t\t<div class='switch'>\n\t\t\t\t\t<label>\n\t\t\t\t\t\t", ":&nbsp;\n\t\t\t\t\t\t<input type='checkbox' name='public'>\n\t\t\t\t\t\t<span class='slider round'></span>\n\t\t\t\t\t</label>\n\t\t\t\t\t<p>", "</p>\n\t\t\t\t</div>\n\t\t\t\t<div class='choice'>\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type='checkbox' name='full_photo'>\n\t\t\t\t\t\t<span class='checkbox'>", "</span>\n\t\t\t\t\t\t<span class='label'>", "</span>\n\t\t\t\t\t</label>\n\t\t\t\t\t<p>", "</p>\n\t\t\t\t</div>\n\t\t\t\t<div class='choice'>\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type='checkbox' name='hidden'>\n\t\t\t\t\t\t<span class='checkbox'>", "</span>\n\t\t\t\t\t\t<span class='label'>", "</span>\n\t\t\t\t\t</label>\n\t\t\t\t\t<p>", "</p>\n\t\t\t\t</div>\n\t\t\t\t<div class='choice'>\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type='checkbox' name='downloadable'>\n\t\t\t\t\t\t<span class='checkbox'>", "</span>\n\t\t\t\t\t\t<span class='label'>", "</span>\n\t\t\t\t\t</label>\n\t\t\t\t\t<p>", "</p>\n\t\t\t\t</div>\n\t\t\t\t<div class='choice'>\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type='checkbox' name='share_button_visible'>\n\t\t\t\t\t\t<span class='checkbox'>", "</span>\n\t\t\t\t\t\t<span class='label'>", "</span>\n\t\t\t\t\t</label>\n\t\t\t\t\t<p>", "</p>\n\t\t\t\t</div>\n\t\t\t\t<div class='choice'>\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type='checkbox' name='password'>\n\t\t\t\t\t\t<span class='checkbox'>", "</span>\n\t\t\t\t\t\t<span class='label'>", "</span>\n\t\t\t\t\t</label>\n\t\t\t\t\t<p>", "</p>\n\t\t\t\t\t<input class='text' name='passwordtext' type='text' placeholder='", "' value=''>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t"], ["\n\t\t\t<form>\n\t\t\t\t<div class='switch'>\n\t\t\t\t\t<label>\n\t\t\t\t\t\t", ":&nbsp;\n\t\t\t\t\t\t<input type='checkbox' name='public'>\n\t\t\t\t\t\t<span class='slider round'></span>\n\t\t\t\t\t</label>\n\t\t\t\t\t<p>", "</p>\n\t\t\t\t</div>\n\t\t\t\t<div class='choice'>\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type='checkbox' name='full_photo'>\n\t\t\t\t\t\t<span class='checkbox'>", "</span>\n\t\t\t\t\t\t<span class='label'>", "</span>\n\t\t\t\t\t</label>\n\t\t\t\t\t<p>", "</p>\n\t\t\t\t</div>\n\t\t\t\t<div class='choice'>\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type='checkbox' name='hidden'>\n\t\t\t\t\t\t<span class='checkbox'>", "</span>\n\t\t\t\t\t\t<span class='label'>", "</span>\n\t\t\t\t\t</label>\n\t\t\t\t\t<p>", "</p>\n\t\t\t\t</div>\n\t\t\t\t<div class='choice'>\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type='checkbox' name='downloadable'>\n\t\t\t\t\t\t<span class='checkbox'>", "</span>\n\t\t\t\t\t\t<span class='label'>", "</span>\n\t\t\t\t\t</label>\n\t\t\t\t\t<p>", "</p>\n\t\t\t\t</div>\n\t\t\t\t<div class='choice'>\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type='checkbox' name='share_button_visible'>\n\t\t\t\t\t\t<span class='checkbox'>", "</span>\n\t\t\t\t\t\t<span class='label'>", "</span>\n\t\t\t\t\t</label>\n\t\t\t\t\t<p>", "</p>\n\t\t\t\t</div>\n\t\t\t\t<div class='choice'>\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type='checkbox' name='password'>\n\t\t\t\t\t\t<span class='checkbox'>", "</span>\n\t\t\t\t\t\t<span class='label'>", "</span>\n\t\t\t\t\t</label>\n\t\t\t\t\t<p>", "</p>\n\t\t\t\t\t<input class='text' name='passwordtext' type='text' placeholder='", "' value=''>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t"]),
     _templateObject8 = _taggedTemplateLiteral(["?albumIDs=", ""], ["?albumIDs=", ""]),
     _templateObject9 = _taggedTemplateLiteral(["<p>", " '$", "' ", " '$", "'?</p>"], ["<p>", " '$", "' ", " '$", "'?</p>"]),
@@ -282,18 +282,18 @@ var _templateObject = _taggedTemplateLiteral(["<p>", " <input class='text' name=
     _templateObject14 = _taggedTemplateLiteral(["<div class='divider'><h1>", "</h1></div>"], ["<div class='divider'><h1>", "</h1></div>"]),
     _templateObject15 = _taggedTemplateLiteral(["<div id='", "' class='edit'>", "</div>"], ["<div id='", "' class='edit'>", "</div>"]),
     _templateObject16 = _taggedTemplateLiteral(["<div id='multiselect' style='top: ", "px; left: ", "px;'></div>"], ["<div id='multiselect' style='top: ", "px; left: ", "px;'></div>"]),
-    _templateObject17 = _taggedTemplateLiteral(["\n\t\t\t<div class='album ", "' data-id='", "'>\n\t\t\t\t  ", "\n\t\t\t\t  ", "\n\t\t\t\t  ", "\n\t\t\t\t<div class='overlay'>\n\t\t\t\t\t<h1 title='$", "'>$", "</h1>\n\t\t\t\t\t<a>$", "</a>\n\t\t\t\t</div>\n\t\t\t"], ["\n\t\t\t<div class='album ", "' data-id='", "'>\n\t\t\t\t  ", "\n\t\t\t\t  ", "\n\t\t\t\t  ", "\n\t\t\t\t<div class='overlay'>\n\t\t\t\t\t<h1 title='$", "'>$", "</h1>\n\t\t\t\t\t<a>$", "</a>\n\t\t\t\t</div>\n\t\t\t"]),
+    _templateObject17 = _taggedTemplateLiteral(["\n\t\t\t<div class='album ", "' data-id='", "' data-tabindex='", "'>\n\t\t\t\t  ", "\n\t\t\t\t  ", "\n\t\t\t\t  ", "\n\t\t\t\t<div class='overlay'>\n\t\t\t\t\t<h1 title='$", "'>$", "</h1>\n\t\t\t\t\t<a>$", "</a>\n\t\t\t\t</div>\n\t\t\t"], ["\n\t\t\t<div class='album ", "' data-id='", "' data-tabindex='", "'>\n\t\t\t\t  ", "\n\t\t\t\t  ", "\n\t\t\t\t  ", "\n\t\t\t\t<div class='overlay'>\n\t\t\t\t\t<h1 title='$", "'>$", "</h1>\n\t\t\t\t\t<a>$", "</a>\n\t\t\t\t</div>\n\t\t\t"]),
     _templateObject18 = _taggedTemplateLiteral(["\n\t\t\t\t<div class='badges'>\n\t\t\t\t\t<a class='badge ", " icn-star'>", "</a>\n\t\t\t\t\t<a class='badge ", " ", " icn-share'>", "</a>\n\t\t\t\t\t<a class='badge ", "'>", "</a>\n\t\t\t\t\t<a class='badge ", "'>", "</a>\n\t\t\t\t\t<a class='badge ", "'>", "</a>\n\t\t\t\t</div>\n\t\t\t\t"], ["\n\t\t\t\t<div class='badges'>\n\t\t\t\t\t<a class='badge ", " icn-star'>", "</a>\n\t\t\t\t\t<a class='badge ", " ", " icn-share'>", "</a>\n\t\t\t\t\t<a class='badge ", "'>", "</a>\n\t\t\t\t\t<a class='badge ", "'>", "</a>\n\t\t\t\t\t<a class='badge ", "'>", "</a>\n\t\t\t\t</div>\n\t\t\t\t"]),
     _templateObject19 = _taggedTemplateLiteral(["\n\t\t\t\t<div class='subalbum_badge'>\n\t\t\t\t\t<a class='badge badge--folder'>", "</a>\n\t\t\t\t</div>"], ["\n\t\t\t\t<div class='subalbum_badge'>\n\t\t\t\t\t<a class='badge badge--folder'>", "</a>\n\t\t\t\t</div>"]),
-    _templateObject20 = _taggedTemplateLiteral(["\n\t\t\t<div class='photo ", "' data-album-id='", "' data-id='", "'>\n\t\t\t\t", "\n\t\t\t\t<div class='overlay'>\n\t\t\t\t\t<h1 title='$", "'>$", "</h1>\n\t\t\t"], ["\n\t\t\t<div class='photo ", "' data-album-id='", "' data-id='", "'>\n\t\t\t\t", "\n\t\t\t\t<div class='overlay'>\n\t\t\t\t\t<h1 title='$", "'>$", "</h1>\n\t\t\t"]),
+    _templateObject20 = _taggedTemplateLiteral(["\n\t\t\t<div class='photo ", "' data-album-id='", "' data-id='", "' data-tabindex='", "'>\n\t\t\t\t", "\n\t\t\t\t<div class='overlay'>\n\t\t\t\t\t<h1 title='$", "'>$", "</h1>\n\t\t\t"], ["\n\t\t\t<div class='photo ", "' data-album-id='", "' data-id='", "' data-tabindex='", "'>\n\t\t\t\t", "\n\t\t\t\t<div class='overlay'>\n\t\t\t\t\t<h1 title='$", "'>$", "</h1>\n\t\t\t"]),
     _templateObject21 = _taggedTemplateLiteral(["<a><span title='Camera Date'>", "</span>", "</a>"], ["<a><span title='Camera Date'>", "</span>", "</a>"]),
     _templateObject22 = _taggedTemplateLiteral(["<a>", "</a>"], ["<a>", "</a>"]),
     _templateObject23 = _taggedTemplateLiteral(["\n\t\t\t\t<div class='badges'>\n\t\t\t\t\t<a class='badge ", " icn-star'>", "</a>\n\t\t\t\t\t<a class='badge ", " icn-share'>", "</a>\n\t\t\t\t</div>\n\t\t\t\t"], ["\n\t\t\t\t<div class='badges'>\n\t\t\t\t\t<a class='badge ", " icn-star'>", "</a>\n\t\t\t\t\t<a class='badge ", " icn-share'>", "</a>\n\t\t\t\t</div>\n\t\t\t\t"]),
     _templateObject24 = _taggedTemplateLiteral(["\n\t\t\t\t\t<div id=\"image_overlay\">\n\t\t\t\t\t\t<h1>$", "</h1>\n\t\t\t\t\t\t<p>$", "</p>\n\t\t\t\t\t</div>\n\t\t\t\t"], ["\n\t\t\t\t\t<div id=\"image_overlay\">\n\t\t\t\t\t\t<h1>$", "</h1>\n\t\t\t\t\t\t<p>$", "</p>\n\t\t\t\t\t</div>\n\t\t\t\t"]),
     _templateObject25 = _taggedTemplateLiteral(["\n\t\t\t<div id=\"image_overlay\">\n\t\t\t\t<h1>$", "</h1>\n\t\t\t\t<p>", "</p>\n\t\t\t</div>\n\t\t"], ["\n\t\t\t<div id=\"image_overlay\">\n\t\t\t\t<h1>$", "</h1>\n\t\t\t\t<p>", "</p>\n\t\t\t</div>\n\t\t"]),
     _templateObject26 = _taggedTemplateLiteral(["\n\t\t\t<div id=\"image_overlay\"><h1>$", "</h1>\n\t\t\t<p>", " at ", ", ", " ", "<br>\n\t\t\t", " ", "</p>\n\t\t\t</div>\n\t\t"], ["\n\t\t\t<div id=\"image_overlay\"><h1>$", "</h1>\n\t\t\t<p>", " at ", ", ", " ", "<br>\n\t\t\t", " ", "</p>\n\t\t\t</div>\n\t\t"]),
-    _templateObject27 = _taggedTemplateLiteral(["<video width=\"auto\" height=\"auto\" id='image' controls class='", "' ", "><source src='", "'>Your browser does not support the video tag.</video>"], ["<video width=\"auto\" height=\"auto\" id='image' controls class='", "' ", "><source src='", "'>Your browser does not support the video tag.</video>"]),
-    _templateObject28 = _taggedTemplateLiteral(["<img id='image' class='", "' src='img/placeholder.png' draggable='false' alt='big'>"], ["<img id='image' class='", "' src='img/placeholder.png' draggable='false' alt='big'>"]),
+    _templateObject27 = _taggedTemplateLiteral(["<video width=\"auto\" height=\"auto\" id='image' controls class='", "' autobuffer ", " data-tabindex='", "'><source src='", "'>Your browser does not support the video tag.</video>"], ["<video width=\"auto\" height=\"auto\" id='image' controls class='", "' autobuffer ", " data-tabindex='", "'><source src='", "'>Your browser does not support the video tag.</video>"]),
+    _templateObject28 = _taggedTemplateLiteral(["<img id='image' class='", "' src='img/placeholder.png' draggable='false' alt='big' data-tabindex='", "'>"], ["<img id='image' class='", "' src='img/placeholder.png' draggable='false' alt='big' data-tabindex='", "'>"]),
     _templateObject29 = _taggedTemplateLiteral(["", ""], ["", ""]),
     _templateObject30 = _taggedTemplateLiteral(["<div class='no_content fadeIn'>", ""], ["<div class='no_content fadeIn'>", ""]),
     _templateObject31 = _taggedTemplateLiteral(["<p>", "</p>"], ["<p>", "</p>"]),
@@ -306,12 +306,12 @@ var _templateObject = _taggedTemplateLiteral(["<p>", " <input class='text' name=
     _templateObject38 = _taggedTemplateLiteral(["<div class=\"users_view_line\">\n\t\t\t<p id=\"UserData", "\">\n\t\t\t<input name=\"id\" type=\"hidden\" value=\"", "\" />\n\t\t\t<input class=\"text\" name=\"username\" type=\"text\" value=\"$", "\" placeholder=\"username\" />\n\t\t\t<input class=\"text\" name=\"password\" type=\"text\" placeholder=\"new password\" />\n\t\t\t<span class=\"choice\" title=\"Allow uploads\">\n\t\t\t<label>\n\t\t\t<input type=\"checkbox\" name=\"upload\" />\n\t\t\t<span class=\"checkbox\"><svg class=\"iconic \"><use xlink:href=\"#check\"></use></svg></span>\n\t\t\t</label>\n\t\t\t</span>\n\t\t\t<span class=\"choice\" title=\"Restricted account\">\n\t\t\t<label>\n\t\t\t<input type=\"checkbox\" name=\"lock\" />\n\t\t\t<span class=\"checkbox\"><svg class=\"iconic \"><use xlink:href=\"#check\"></use></svg></span>\n\t\t\t</label>\n\t\t\t</span>\n\t\t\t</p>\n\t\t\t<a id=\"UserUpdate", "\"  class=\"basicModal__button basicModal__button_OK\">Save</a>\n\t\t\t<a id=\"UserDelete", "\"  class=\"basicModal__button basicModal__button_DEL\">Delete</a>\n\t\t</div>\n\t\t"], ["<div class=\"users_view_line\">\n\t\t\t<p id=\"UserData", "\">\n\t\t\t<input name=\"id\" type=\"hidden\" value=\"", "\" />\n\t\t\t<input class=\"text\" name=\"username\" type=\"text\" value=\"$", "\" placeholder=\"username\" />\n\t\t\t<input class=\"text\" name=\"password\" type=\"text\" placeholder=\"new password\" />\n\t\t\t<span class=\"choice\" title=\"Allow uploads\">\n\t\t\t<label>\n\t\t\t<input type=\"checkbox\" name=\"upload\" />\n\t\t\t<span class=\"checkbox\"><svg class=\"iconic \"><use xlink:href=\"#check\"></use></svg></span>\n\t\t\t</label>\n\t\t\t</span>\n\t\t\t<span class=\"choice\" title=\"Restricted account\">\n\t\t\t<label>\n\t\t\t<input type=\"checkbox\" name=\"lock\" />\n\t\t\t<span class=\"checkbox\"><svg class=\"iconic \"><use xlink:href=\"#check\"></use></svg></span>\n\t\t\t</label>\n\t\t\t</span>\n\t\t\t</p>\n\t\t\t<a id=\"UserUpdate", "\"  class=\"basicModal__button basicModal__button_OK\">Save</a>\n\t\t\t<a id=\"UserDelete", "\"  class=\"basicModal__button basicModal__button_DEL\">Delete</a>\n\t\t</div>\n\t\t"]),
     _templateObject39 = _taggedTemplateLiteral(["\n\t\t\t           ", "\n\t\t\t           <img class='cover' width='16' height='16' src='", "'>\n\t\t\t           <div class='title'>$", "</div>\n\t\t\t           "], ["\n\t\t\t           ", "\n\t\t\t           <img class='cover' width='16' height='16' src='", "'>\n\t\t\t           <div class='title'>$", "</div>\n\t\t\t           "]),
     _templateObject40 = _taggedTemplateLiteral(["$", "", ""], ["$", "", ""]),
-    _templateObject41 = _taggedTemplateLiteral(["\n\t\t<a id=\"text_settings_close\" class=\"closetxt\">", "</a>\n\t\t<a id=\"button_settings_close\" class=\"closebtn\" >&times;</a>\n\t\t<a class=\"linkMenu\" id=\"button_settings_open\"><svg class=\"iconic\"><use xlink:href=\"#cog\"></use></svg>", "</a>"], ["\n\t\t<a id=\"text_settings_close\" class=\"closetxt\">", "</a>\n\t\t<a id=\"button_settings_close\" class=\"closebtn\" >&times;</a>\n\t\t<a class=\"linkMenu\" id=\"button_settings_open\"><svg class=\"iconic\"><use xlink:href=\"#cog\"></use></svg>", "</a>"]),
-    _templateObject42 = _taggedTemplateLiteral(["\n\t\t<a class=\"linkMenu\" id=\"button_users\">", "", " </a>\n\t\t<a class=\"linkMenu\" id=\"button_sharing\">", "", "</a>"], ["\n\t\t<a class=\"linkMenu\" id=\"button_users\">", "", " </a>\n\t\t<a class=\"linkMenu\" id=\"button_sharing\">", "", "</a>"]),
-    _templateObject43 = _taggedTemplateLiteral(["\n\t\t<a class=\"linkMenu\" id=\"button_logs\">", "", "</a>\n\t\t<a class=\"linkMenu\" id=\"button_diagnostics\">", "", "</a>\n\t\t<a class=\"linkMenu\" id=\"button_about\">", "", "</a>\n\t\t<a class=\"linkMenu\" id=\"button_signout\">", "", "</a>"], ["\n\t\t<a class=\"linkMenu\" id=\"button_logs\">", "", "</a>\n\t\t<a class=\"linkMenu\" id=\"button_diagnostics\">", "", "</a>\n\t\t<a class=\"linkMenu\" id=\"button_about\">", "", "</a>\n\t\t<a class=\"linkMenu\" id=\"button_signout\">", "", "</a>"]),
-    _templateObject44 = _taggedTemplateLiteral(["\n\t\t<a class=\"linkMenu\" id=\"button_update\">", "", "</a>\n\t\t"], ["\n\t\t<a class=\"linkMenu\" id=\"button_update\">", "", "</a>\n\t\t"]),
+    _templateObject41 = _taggedTemplateLiteral(["\n\t\t<a id=\"text_settings_close\" class=\"closetxt\" data-tabindex=\"-1\">", "</a>\n\t\t<a id=\"button_settings_close\" class=\"closebtn\" data-tabindex=\"20\">&times;</a>\n\t\t<a class=\"linkMenu\" id=\"button_settings_open\" data-tabindex=\"-1\"><svg class=\"iconic\"><use xlink:href=\"#cog\"></use></svg>", "</a>"], ["\n\t\t<a id=\"text_settings_close\" class=\"closetxt\" data-tabindex=\"-1\">", "</a>\n\t\t<a id=\"button_settings_close\" class=\"closebtn\" data-tabindex=\"20\">&times;</a>\n\t\t<a class=\"linkMenu\" id=\"button_settings_open\" data-tabindex=\"-1\"><svg class=\"iconic\"><use xlink:href=\"#cog\"></use></svg>", "</a>"]),
+    _templateObject42 = _taggedTemplateLiteral(["\n\t\t<a class=\"linkMenu\" id=\"button_users\" data-tabindex=\"-1\">", "", " </a>\n\t\t<a class=\"linkMenu\" id=\"button_sharing\" data-tabindex=\"-1\">", "", "</a>"], ["\n\t\t<a class=\"linkMenu\" id=\"button_users\" data-tabindex=\"-1\">", "", " </a>\n\t\t<a class=\"linkMenu\" id=\"button_sharing\" data-tabindex=\"-1\">", "", "</a>"]),
+    _templateObject43 = _taggedTemplateLiteral(["\n\t\t<a class=\"linkMenu\" id=\"button_logs\" data-tabindex=\"-1\">", "", "</a>\n\t\t<a class=\"linkMenu\" id=\"button_diagnostics\" data-tabindex=\"-1\">", "", "</a>\n\t\t<a class=\"linkMenu\" id=\"button_about\" data-tabindex=\"-1\">", "", "</a>\n\t\t<a class=\"linkMenu\" id=\"button_signout\" data-tabindex=\"21\">", "", "</a>"], ["\n\t\t<a class=\"linkMenu\" id=\"button_logs\" data-tabindex=\"-1\">", "", "</a>\n\t\t<a class=\"linkMenu\" id=\"button_diagnostics\" data-tabindex=\"-1\">", "", "</a>\n\t\t<a class=\"linkMenu\" id=\"button_about\" data-tabindex=\"-1\">", "", "</a>\n\t\t<a class=\"linkMenu\" id=\"button_signout\" data-tabindex=\"21\">", "", "</a>"]),
+    _templateObject44 = _taggedTemplateLiteral(["\n\t\t<a class=\"linkMenu\" id=\"button_update\"  data-tabindex=\"-1\">", "", "</a>\n\t\t"], ["\n\t\t<a class=\"linkMenu\" id=\"button_update\"  data-tabindex=\"-1\">", "", "</a>\n\t\t"]),
     _templateObject45 = _taggedTemplateLiteral(["\n\t\t\t\t<h1>Lychee ", "</h1>\n\t\t\t\t<div class='version'><span><a target='_blank' href='", "'>", "</a></span></div>\n\t\t\t\t<h1>", "</h1>\n\t\t\t\t<p><a target='_blank' href='", "'>Lychee</a> ", "</p>\n\t\t\t  "], ["\n\t\t\t\t<h1>Lychee ", "</h1>\n\t\t\t\t<div class='version'><span><a target='_blank' href='", "'>", "</a></span></div>\n\t\t\t\t<h1>", "</h1>\n\t\t\t\t<p><a target='_blank' href='", "'>Lychee</a> ", "</p>\n\t\t\t  "]),
-    _templateObject46 = _taggedTemplateLiteral(["\n\t\t\t<form>\n\t\t\t\t<p class='signIn'>\n\t\t\t\t\t<input class='text' name='username' autocomplete='on' type='text' placeholder='$", "' autocapitalize='off'>\n\t\t\t\t\t<input class='text' name='password' autocomplete='current-password' type='password' placeholder='$", "'>\n\t\t\t\t</p>\n\t\t\t\t<p class='version'>Lychee ", "<span> &#8211; <a target='_blank' href='", "'>", "</a><span></p>\n\t\t\t</form>\n\t\t\t"], ["\n\t\t\t<form>\n\t\t\t\t<p class='signIn'>\n\t\t\t\t\t<input class='text' name='username' autocomplete='on' type='text' placeholder='$", "' autocapitalize='off'>\n\t\t\t\t\t<input class='text' name='password' autocomplete='current-password' type='password' placeholder='$", "'>\n\t\t\t\t</p>\n\t\t\t\t<p class='version'>Lychee ", "<span> &#8211; <a target='_blank' href='", "'>", "</a><span></p>\n\t\t\t</form>\n\t\t\t"]),
+    _templateObject46 = _taggedTemplateLiteral(["\n\t\t\t<form>\n\t\t\t\t<p class='signIn'>\n\t\t\t\t\t<input class='text' name='username' autocomplete='on' type='text' placeholder='$", "' autocapitalize='off' data-tabindex='", "'>\n\t\t\t\t\t<input class='text' name='password' autocomplete='current-password' type='password' placeholder='$", "' data-tabindex='", "'>\n\t\t\t\t</p>\n\t\t\t\t<p class='version'>Lychee ", "<span> &#8211; <a target='_blank' href='", "' data-tabindex='-1'>", "</a><span></p>\n\t\t\t</form>\n\t\t\t"], ["\n\t\t\t<form>\n\t\t\t\t<p class='signIn'>\n\t\t\t\t\t<input class='text' name='username' autocomplete='on' type='text' placeholder='$", "' autocapitalize='off' data-tabindex='", "'>\n\t\t\t\t\t<input class='text' name='password' autocomplete='current-password' type='password' placeholder='$", "' data-tabindex='", "'>\n\t\t\t\t</p>\n\t\t\t\t<p class='version'>Lychee ", "<span> &#8211; <a target='_blank' href='", "' data-tabindex='-1'>", "</a><span></p>\n\t\t\t</form>\n\t\t\t"]),
     _templateObject47 = _taggedTemplateLiteral(["<link data-prefetch rel=\"prefetch\" href=\"", "\">"], ["<link data-prefetch rel=\"prefetch\" href=\"", "\">"]),
     _templateObject48 = _taggedTemplateLiteral(["<p>", " '", "' ", "</p>"], ["<p>", " '", "' ", "</p>"]),
     _templateObject49 = _taggedTemplateLiteral(["<p>", " ", " ", "</p>"], ["<p>", " ", " ", "</p>"]),
@@ -829,6 +829,20 @@ album.load = function (albumID) {
 				lychee.animate(lychee.content, 'contentZoomIn');
 				header.setMode('album');
 			}
+
+			tabindex.makeFocusable(lychee.content);
+			if (lychee.active_focus_on_page_load) {
+				// Put focus on first element - either album or photo
+				var _first_album = $(".album:first");
+				if (_first_album.length !== 0) {
+					_first_album.focus();
+				} else {
+					first_photo = $(".photo:first");
+					if (first_photo.length !== 0) {
+						first_photo.focus();
+					}
+				}
+			}
 		}, waitTime);
 	};
 
@@ -846,6 +860,21 @@ album.load = function (albumID) {
 			});
 		} else {
 			processData(data);
+
+			tabindex.makeFocusable(lychee.content);
+
+			if (lychee.active_focus_on_page_load) {
+				// Put focus on first element - either album or photo
+				first_album = $(".album:first");
+				if (first_album.length !== 0) {
+					first_album.focus();
+				} else {
+					first_photo = $(".photo:first");
+					if (first_photo.length !== 0) {
+						first_photo.focus();
+					}
+				}
+			}
 		}
 	});
 };
@@ -1543,6 +1572,22 @@ albums.load = function () {
 				header.setMode('albums');
 				view.albums.init();
 				lychee.animate(lychee.content, 'contentZoomIn');
+
+				tabindex.makeFocusable(lychee.content);
+
+				if (lychee.active_focus_on_page_load) {
+					// Put focus on first element - either album or photo
+					var _first_album2 = $(".album:first");
+					if (_first_album2.length !== 0) {
+						_first_album2.focus();
+					} else {
+						first_photo = $(".photo:first");
+						if (first_photo.length !== 0) {
+							first_photo.focus();
+						}
+					}
+				}
+
 				setTimeout(function () {
 					lychee.footer_show();
 				}, 300);
@@ -1554,6 +1599,21 @@ albums.load = function () {
 			header.setMode('albums');
 			view.albums.init();
 			lychee.animate(lychee.content, 'contentZoomIn');
+
+			tabindex.makeFocusable(lychee.content);
+
+			if (lychee.active_focus_on_page_load) {
+				// Put focus on first element - either album or photo
+				first_album = $(".album:first");
+				if (first_album.length !== 0) {
+					first_album.focus();
+				} else {
+					first_photo = $(".photo:first");
+					if (first_photo.length !== 0) {
+						first_photo.focus();
+					}
+				}
+			}
 		}, 300);
 	}
 };
@@ -1803,7 +1863,7 @@ build.album = function (data) {
 		}
 	}
 
-	html += lychee.html(_templateObject17, disabled ? "disabled" : "", data.id, build.getAlbumThumb(data, 2), build.getAlbumThumb(data, 1), build.getAlbumThumb(data, 0), data.title, data.title, date_stamp);
+	html += lychee.html(_templateObject17, disabled ? "disabled" : "", data.id, tabindex.get_next_tab_index(), build.getAlbumThumb(data, 2), build.getAlbumThumb(data, 1), build.getAlbumThumb(data, 0), data.title, data.title, date_stamp);
 
 	if (album.isUploadable() && !disabled) {
 
@@ -1832,12 +1892,12 @@ build.photo = function (data) {
 	var isLivePhoto = data.livePhotoUrl !== '' && data.livePhotoUrl !== null;
 
 	if (data.thumbUrl === 'uploads/thumb/' && isLivePhoto) {
-		thumbnail = "<span class=\"thumbimg\"><img src='img/live-photo-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>";
+		thumbnail = "<span class=\"thumbimg\"><img src='img/live-photo-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='" + tabindex.get_next_tab_index() + "'></span>";
 	}
 	if (data.thumbUrl === 'uploads/thumb/' && isVideo) {
-		thumbnail = "<span class=\"thumbimg\"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>";
+		thumbnail = "<span class=\"thumbimg\"><img src='img/play-icon.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='" + tabindex.get_next_tab_index() + "'></span>";
 	} else if (data.thumbUrl === 'uploads/thumb/' && isRaw) {
-		thumbnail = "<span class=\"thumbimg\"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false'></span>";
+		thumbnail = "<span class=\"thumbimg\"><img src='img/placeholder.png' alt='Photo thumbnail' data-overlay='false' draggable='false' data-tabindex='" + tabindex.get_next_tab_index() + "'></span>";
 	} else if (lychee.layout === '0') {
 
 		if (data.hasOwnProperty('thumb2x')) {
@@ -1854,7 +1914,7 @@ build.photo = function (data) {
 		}
 
 		thumbnail = "<span class=\"thumbimg" + (isVideo ? ' video' : '') + (isLivePhoto ? ' livephoto' : '') + "\">";
-		thumbnail += "<img class='lazyload' src='img/placeholder.png' data-src='" + data.thumbUrl + "' " + thumb2x + " alt='Photo thumbnail' data-overlay='false' draggable='false'>";
+		thumbnail += "<img class='lazyload' src='img/placeholder.png' data-src='" + data.thumbUrl + "' " + thumb2x + " alt='Photo thumbnail' data-overlay='false' draggable='false' >";
 		thumbnail += "</span>";
 	} else {
 
@@ -1864,7 +1924,7 @@ build.photo = function (data) {
 			}
 
 			thumbnail = "<span class=\"thumbimg" + (isVideo ? ' video' : '') + (isLivePhoto ? ' livephoto' : '') + "\">";
-			thumbnail += "<img class='lazyload' src='img/placeholder.png' data-src='" + data.small + "' " + thumb2x + " alt='Photo thumbnail' data-overlay='false' draggable='false'>";
+			thumbnail += "<img class='lazyload' src='img/placeholder.png' data-src='" + data.small + "' " + thumb2x + " alt='Photo thumbnail' data-overlay='false' draggable='false' >";
 			thumbnail += "</span>";
 		} else if (data.medium !== '') {
 			if (data.hasOwnProperty('medium2x') && data.medium2x !== '') {
@@ -1872,12 +1932,12 @@ build.photo = function (data) {
 			}
 
 			thumbnail = "<span class=\"thumbimg" + (isVideo ? ' video' : '') + (isLivePhoto ? ' livephoto' : '') + "\">";
-			thumbnail += "<img class='lazyload' src='img/placeholder.png' data-src='" + data.medium + "' " + thumb2x + " alt='Photo thumbnail' data-overlay='false' draggable='false'>";
+			thumbnail += "<img class='lazyload' src='img/placeholder.png' data-src='" + data.medium + "' " + thumb2x + " alt='Photo thumbnail' data-overlay='false' draggable='false' >";
 			thumbnail += "</span>";
 		} else if (!isVideo) {
 			// Fallback for images with no small or medium.
 			thumbnail = "<span class=\"thumbimg" + (isLivePhoto ? ' livephoto' : '') + "\">";
-			thumbnail += "<img class='lazyload' src='img/placeholder.png' data-src='" + data.url + "' alt='Photo thumbnail' data-overlay='false' draggable='false'>";
+			thumbnail += "<img class='lazyload' src='img/placeholder.png' data-src='" + data.url + "' alt='Photo thumbnail' data-overlay='false' draggable='false' >";
 			thumbnail += "</span>";
 		} else {
 			// Fallback for videos with no small (the case of no thumb is
@@ -1897,14 +1957,14 @@ build.photo = function (data) {
 			}
 
 			thumbnail = "<span class=\"thumbimg video\">";
-			thumbnail += "<img class='lazyload' src='img/placeholder.png' data-src='" + data.thumbUrl + "' " + thumb2x + " alt='Photo thumbnail' data-overlay='false' draggable='false'>";
+			thumbnail += "<img class='lazyload' src='img/placeholder.png' data-src='" + data.thumbUrl + "' " + thumb2x + " alt='Photo thumbnail' data-overlay='false' draggable='false' >";
 			thumbnail += "</span>";
 		}
 	}
 
-	html += lychee.html(_templateObject20, disabled ? "disabled" : "", data.album, data.id, thumbnail, data.title, data.title);
+	html += lychee.html(_templateObject20, disabled ? "disabled" : "", data.album, data.id, tabindex.get_next_tab_index(), thumbnail, data.title, data.title);
 
-	if (data.cameraDate === '1') html += lychee.html(_templateObject21, build.iconic('camera-slr'), data.takedate);else html += lychee.html(_templateObject22, data.sysdate);
+	if (data.takedate !== '') html += lychee.html(_templateObject21, build.iconic('camera-slr'), data.takedate);else html += lychee.html(_templateObject22, data.sysdate);
 
 	html += "</div>";
 
@@ -1945,9 +2005,9 @@ build.imageview = function (data, visibleControls, autoplay) {
 	var thumb = '';
 
 	if (data.type.indexOf('video') > -1) {
-		html += lychee.html(_templateObject27, visibleControls === true ? '' : 'full', autoplay ? 'autoplay' : '', data.url);
+		html += lychee.html(_templateObject27, visibleControls === true ? '' : 'full', autoplay ? 'autoplay' : '', tabindex.get_next_tab_index(), data.url);
 	} else if (data.type.indexOf('raw') > -1 && data.medium === '') {
-		html += lychee.html(_templateObject28, visibleControls === true ? '' : 'full');
+		html += lychee.html(_templateObject28, visibleControls === true ? '' : 'full', tabindex.get_next_tab_index());
 	} else {
 		var img = '';
 
@@ -1971,9 +2031,9 @@ build.imageview = function (data, visibleControls, autoplay) {
 				if (data.hasOwnProperty('medium2x') && data.medium2x !== '') {
 					medium = "srcset='" + data.medium + " " + parseInt(data.medium_dim, 10) + "w, " + data.medium2x + " " + parseInt(data.medium2x_dim, 10) + "w'";
 				}
-				img = "<img id='image' class='" + (visibleControls === true ? '' : 'full') + "' src='" + data.medium + "' " + medium + "  draggable='false' alt='medium'>";
+				img = "<img id='image' class='" + (visibleControls === true ? '' : 'full') + "' src='" + data.medium + "' " + medium + ("  draggable='false' alt='medium' data-tabindex='" + tabindex.get_next_tab_index() + "'>");
 			} else {
-				img = "<img id='image' class='" + (visibleControls === true ? '' : 'full') + "' src='" + data.url + "' draggable='false' alt='big'>";
+				img = "<img id='image' class='" + (visibleControls === true ? '' : 'full') + "' src='" + data.url + "' draggable='false' alt='big' data-tabindex='" + tabindex.get_next_tab_index() + "'>";
 			}
 		} else {
 
@@ -1982,10 +2042,10 @@ build.imageview = function (data, visibleControls, autoplay) {
 				var medium_width = medium_dims[0];
 				var medium_height = medium_dims[1];
 				// It's a live photo
-				img = "<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='" + data.medium + "' data-video-src='" + data.livePhotoUrl + "'  style='width: " + medium_width + "px; height: " + medium_height + "px'></div>";
+				img = "<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='" + data.medium + "' data-video-src='" + data.livePhotoUrl + "'  style='width: " + medium_width + "px; height: " + medium_height + "px' data-tabindex='" + tabindex.get_next_tab_index() + "'></div>";
 			} else {
 				// It's a live photo
-				img = "<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='" + data.url + "' data-video-src='" + data.livePhotoUrl + "'  style='width: " + data.width + "px; height: " + data.height + "px'></div>";
+				img = "<div id='livephoto' data-live-photo data-proactively-loads-video='true' data-photo-src='" + data.url + "' data-video-src='" + data.livePhotoUrl + "'  style='width: " + data.width + "px; height: " + data.height + "px' data-tabindex='" + tabindex.get_next_tab_index() + "'></div>";
 			}
 		}
 
@@ -2602,6 +2662,8 @@ header.bind = function () {
 
 		if ($(this).hasClass('header__title--editable') === false) return false;
 
+		if (lychee.enable_contextmenu_header === false) return false;
+
 		if (visible.photo()) contextMenu.photoTitle(album.getID(), _photo.getID(), e);else contextMenu.albumTitle(album.getID(), e);
 	});
 
@@ -2715,6 +2777,8 @@ header.show = function () {
 	lychee.imageview.removeClass('full');
 	header.dom().removeClass('header--hidden');
 
+	tabindex.restoreSettings(header.dom());
+
 	_photo.updateSizeLivePhotoDuringAnimation();
 
 	return true;
@@ -2730,6 +2794,9 @@ header.hideIfLivePhotoNotPlaying = function () {
 header.hide = function () {
 
 	if (visible.photo() && !visible.sidebar() && !visible.contextMenu() && basicModal.visible() === false) {
+
+		tabindex.saveSettings(header.dom());
+		tabindex.makeUnfocusable(header.dom());
 
 		lychee.imageview.addClass('full');
 		header.dom().addClass('header--hidden');
@@ -2765,19 +2832,34 @@ header.setMode = function (mode) {
 			header.dom().removeClass('header--view');
 			header.dom('.header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--public').addClass('header__toolbar--visible');
+			tabindex.makeFocusable(header.dom('.header__toolbar--public'));
+			tabindex.makeUnfocusable(header.dom('.header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map'));
+
 			if (lychee.public_search) {
-				$('.header__search, .header__clear', '.header__toolbar--public').show();
+				var e = $('.header__search, .header__clear', '.header__toolbar--public');
+				e.show();
+				tabindex.makeFocusable(e);
 			} else {
-				$('.header__search, .header__clear', '.header__toolbar--public').hide();
+				var _e2 = $('.header__search, .header__clear', '.header__toolbar--public');
+				_e2.hide();
+				tabindex.makeUnfocusable(_e2);
 			}
 
 			// Set icon in Public mode
 			if (lychee.map_display_public) {
-				$('.button--map-albums', '.header__toolbar--public').show();
+				var _e3 = $('.button--map-albums', '.header__toolbar--public');
+				_e3.show();
+				tabindex.makeFocusable(_e3);
 			} else {
-				$('.button--map-albums', '.header__toolbar--public').hide();
+				var _e4 = $('.button--map-albums', '.header__toolbar--public');
+				_e4.hide();
+				tabindex.makeUnfocusable(_e4);
 			}
 
+			// Set focus on login button
+			if (lychee.active_focus_on_page_load) {
+				$('#button_signin').focus();
+			}
 			return true;
 
 		case 'albums':
@@ -2786,11 +2868,27 @@ header.setMode = function (mode) {
 			header.dom('.header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--albums').addClass('header__toolbar--visible');
 
+			tabindex.makeFocusable(header.dom('.header__toolbar--albums'));
+			tabindex.makeUnfocusable(header.dom('.header__toolbar--public, .header__toolbar--album, .header__toolbar--photo, .header__toolbar--map'));
+
 			// If map is disabled, we should hide the icon
 			if (lychee.map_display) {
-				$('.button--map-albums', '.header__toolbar--albums').show();
+				var _e5 = $('.button--map-albums', '.header__toolbar--albums');
+				_e5.show();
+				tabindex.makeFocusable(_e5);
 			} else {
-				$('.button--map-albums', '.header__toolbar--albums').hide();
+				var _e6 = $('.button--map-albums', '.header__toolbar--albums');
+				_e6.hide();
+				tabindex.makeUnfocusable(_e6);
+			}
+
+			if (lychee.enable_button_add) {
+				var _e7 = $('.button_add', '.header__toolbar--albums');
+				_e7.show();
+				tabindex.makeFocusable(_e7);
+			} else {
+				var _e8 = $('.button_add', '.header__toolbar--albums');
+				_e8.remove();
 			}
 
 			return true;
@@ -2803,40 +2901,92 @@ header.setMode = function (mode) {
 			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--album').addClass('header__toolbar--visible');
 
+			tabindex.makeFocusable(header.dom('.header__toolbar--album'));
+			tabindex.makeUnfocusable(header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo, .header__toolbar--map'));
+
 			// Hide download button when album empty or we are not allowed to
 			// upload to it and it's not explicitly marked as downloadable.
 			if (!album.json || album.json.photos === false && album.json.albums && album.json.albums.length === 0 || !album.isUploadable() && album.json.downloadable === '0') {
-				$('#button_archive').hide();
+				var _e9 = $('#button_archive');
+				_e9.hide();
+				tabindex.makeUnfocusable(_e9);
 			} else {
-				$('#button_archive').show();
+				var _e10 = $('#button_archive');
+				_e10.show();
+				tabindex.makeFocusable(_e10);
 			}
 
 			if (album.json && album.json.hasOwnProperty('share_button_visible') && album.json.share_button_visible !== '1') {
-				$('#button_share_album').hide();
+				var _e11 = $('#button_share_album');
+				_e11.hide();
+				tabindex.makeUnfocusable(_e11);
 			} else {
-				$('#button_share_album').show();
+				var _e12 = $('#button_share_album');
+				_e12.show();
+				tabindex.makeFocusable(_e12);
 			}
 
 			// If map is disabled, we should hide the icon
 			if (lychee.publicMode === true ? lychee.map_display_public : lychee.map_display) {
-				$('#button_map_album').show();
+				var _e13 = $('#button_map_album');
+				_e13.show();
+				tabindex.makeFocusable(_e13);
 			} else {
-				$('#button_map_album').hide();
+				var _e14 = $('#button_map_album');
+				_e14.hide();
+				tabindex.makeUnfocusable(_e14);
 			}
 
 			if (albumID === 's' || albumID === 'f' || albumID === 'r') {
 				$('#button_info_album, #button_trash_album, #button_visibility_album, #button_move_album').hide();
 				$('.button_add, .header__divider', '.header__toolbar--album').show();
+				tabindex.makeFocusable($('.button_add, .header__divider', '.header__toolbar--album').show());
+				tabindex.makeUnfocusable($('#button_info_album, #button_trash_album, #button_visibility_album, #button_move_album'));
 			} else if (albumID === '0') {
 				$('#button_info_album, #button_visibility_album, #button_move_album').hide();
 				$('#button_trash_album, .button_add, .header__divider', '.header__toolbar--album').show();
+				tabindex.makeFocusable($('#button_trash_album, .button_add, .header__divider', '.header__toolbar--album'));
+				tabindex.makeUnfocusable($('#button_info_album, #button_visibility_album, #button_move_album'));
 			} else {
 				$('#button_info_album, #button_visibility_album').show();
+				tabindex.makeFocusable($('#button_info_album, #button_visibility_album'));
 				if (album.isUploadable()) {
 					$('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').show();
+					tabindex.makeFocusable($('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album'));
 				} else {
 					$('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album').hide();
+					tabindex.makeUnfocusable($('#button_trash_album, #button_move_album, #button_visibility_album, .button_add, .header__divider', '.header__toolbar--album'));
 				}
+			}
+
+			// Remove buttons if needed
+			if (!lychee.enable_button_visibility) {
+				var _e15 = $('#button_visibility_album', '.header__toolbar--album');
+				_e15.remove();
+			}
+			if (!lychee.enable_button_share) {
+				var _e16 = $('#button_share_album', '.header__toolbar--album');
+				_e16.remove();
+			}
+			if (!lychee.enable_button_archive) {
+				var _e17 = $('#button_archive', '.header__toolbar--album');
+				_e17.remove();
+			}
+			if (!lychee.enable_button_move) {
+				var _e18 = $('#button_move_album', '.header__toolbar--album');
+				_e18.remove();
+			}
+			if (!lychee.enable_button_trash) {
+				var _e19 = $('#button_trash_album', '.header__toolbar--album');
+				_e19.remove();
+			}
+			if (!lychee.enable_button_fullscreen) {
+				var _e20 = $('#button_fs_album_enter', '.header__toolbar--album');
+				_e20.remove();
+			}
+			if (!lychee.enable_button_add) {
+				var _e21 = $('.button_add', '.header__toolbar--album');
+				_e21.remove();
 			}
 
 			return true;
@@ -2847,31 +2997,80 @@ header.setMode = function (mode) {
 			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--photo').addClass('header__toolbar--visible');
 
+			tabindex.makeFocusable(header.dom('.header__toolbar--photo'));
+			tabindex.makeUnfocusable(header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--album, .header__toolbar--map'));
 			// If map is disabled, we should hide the icon
 			if (lychee.publicMode === true ? lychee.map_display_public : lychee.map_display) {
-				$('#button_map').show();
+				var _e22 = $('#button_map');
+				_e22.show();
+				tabindex.makeFocusable(_e22);
 			} else {
-				$('#button_map').hide();
+				var _e23 = $('#button_map');
+				_e23.hide();
+				tabindex.makeUnfocusable(_e23);
 			}
 
 			if (album.isUploadable()) {
-				$('#button_trash, #button_move, #button_visibility, #button_star').show();
+				var _e24 = $('#button_trash, #button_move, #button_visibility, #button_star');
+				_e24.show();
+				tabindex.makeFocusable(_e24);
 			} else {
-				$('#button_trash, #button_move, #button_visibility, #button_star').hide();
+				var _e25 = $('#button_trash, #button_move, #button_visibility, #button_star');
+				_e25.hide();
+				tabindex.makeUnfocusable(_e25);
 			}
 
 			if (_photo.json && _photo.json.hasOwnProperty('share_button_visible') && _photo.json.share_button_visible !== '1') {
-				$('#button_share').hide();
+				var _e26 = $('#button_share');
+				_e26.hide();
+				tabindex.makeUnfocusable(_e26);
 			} else {
-				$('#button_share').show();
+				var _e27 = $('#button_share');
+				_e27.show();
+				tabindex.makeFocusable(_e27);
 			}
 
 			// Hide More menu if empty (see contextMenu.photoMore)
 			$('#button_more').show();
+			tabindex.makeFocusable($('#button_more'));
 			if (!(album.isUploadable() || (_photo.json.hasOwnProperty('downloadable') ? _photo.json.downloadable === '1' : album.json && album.json.downloadable && album.json.downloadable === '1')) && !(_photo.json.url && _photo.json.url !== '')) {
-				$('#button_more').hide();
+				var _e28 = $('#button_more');
+				_e28.hide();
+				tabindex.makeUnfocusable(_e28);
 			}
 
+			// Remove buttons if needed
+			if (!lychee.enable_button_visibility) {
+				var _e29 = $('#button_visibility', '.header__toolbar--photo');
+				_e29.remove();
+			}
+			if (!lychee.enable_button_share) {
+				var _e30 = $('#button_share', '.header__toolbar--photo');
+				_e30.remove();
+			}
+			if (!lychee.enable_button_move) {
+				var _e31 = $('#button_move', '.header__toolbar--photo');
+				_e31.remove();
+			}
+			if (!lychee.enable_button_trash) {
+				var _e32 = $('#button_trash', '.header__toolbar--photo');
+				_e32.remove();
+			}
+			if (!lychee.enable_button_fullscreen) {
+				var _e33 = $('#button_fs_enter', '.header__toolbar--photo');
+				_e33.remove();
+			}
+			if (!lychee.enable_button_more) {
+				var _e34 = $('#button_more', '.header__toolbar--photo');
+				_e34.remove();
+			}
+			if (!lychee.enable_button_rotate) {
+				var _e35 = $('#button_rotate_cwise', '.header__toolbar--photo');
+				_e35.remove();
+
+				_e35 = $('#button_rotate_ccwise', '.header__toolbar--photo');
+				_e35.remove();
+			}
 			return true;
 		case 'map':
 
@@ -2879,6 +3078,8 @@ header.setMode = function (mode) {
 			header.dom('.header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo').removeClass('header__toolbar--visible');
 			header.dom('.header__toolbar--map').addClass('header__toolbar--visible');
 
+			tabindex.makeFocusable(header.dom('.header__toolbar--map'));
+			tabindex.makeUnfocusable(header.dom('.header__toolbar--public, .header__toolbar--album, .header__toolbar--albums, .header__toolbar--photo'));
 			return true;
 
 	}
@@ -2948,19 +3149,31 @@ $(document).ready(function () {
 	header.bind();
 
 	// Image View
-	lychee.imageview.on(eventName, '.arrow_wrapper--previous', _photo.previous).on(eventName, '.arrow_wrapper--next', _photo.next).on('click', 'img, #livephoto', _photo.update_display_overlay);
+	lychee.imageview.on(eventName, '.arrow_wrapper--previous', _photo.previous).on(eventName, '.arrow_wrapper--next', _photo.next).on(eventName, 'img, #livephoto', _photo.update_display_overlay);
 
 	// Keyboard
+
+	Mousetrap.addKeycodes({
+		18: 'ContextMenu',
+		179: 'play_pause',
+		227: 'rewind',
+		228: 'forward'
+	});
+
 	Mousetrap.bind(['l'], function () {
 		lychee.loginDialog();return false;
 	}).bind(['left'], function () {
-		if (visible.photo()) {
-			$('#imageview a#previous').click();return false;
+		if (visible.photo() && (!visible.header() || $('img#image').is(':focus') || $('img#livephoto').is(':focus') || $(':focus').length === 0)) {
+			$('#imageview a#previous').click();
+			return false;
 		}
+		return true;
 	}).bind(['right'], function () {
-		if (visible.photo()) {
-			$('#imageview a#next').click();return false;
+		if (visible.photo() && (!visible.header() || $('img#image').is(':focus') || $('img#livephoto').is(':focus') || $(':focus').length === 0)) {
+			$('#imageview a#next').click();
+			return false;
 		}
+		return true;
 	}).bind(['u'], function () {
 		if (!visible.photo() && album.isUploadable()) {
 			$('#upload_files').click();return false;
@@ -2995,7 +3208,7 @@ $(document).ready(function () {
 		if (visible.photo() && album.isUploadable()) {
 			_photo.editTags([_photo.getID()]);return false;
 		}
-	}).bind(['i'], function () {
+	}).bind(['i', 'ContextMenu'], function () {
 		if (!visible.multiselect()) {
 			_sidebar.toggle();return false;
 		}
@@ -3023,50 +3236,87 @@ $(document).ready(function () {
 		}
 	});
 
-	Mousetrap.bindGlobal('enter', function () {
-		if (basicModal.visible() === true) basicModal.action();
+	Mousetrap.bind(['play_pause'], function () {
+		// If it's a video, we toggle play/pause
+		var video = $("video");
+
+		if (video.length !== 0) {
+			if (video[0].paused) {
+				video[0].play();
+			} else {
+				video[0].pause();
+			}
+		}
 	});
 
-	Mousetrap.bindGlobal(['esc', 'command+up'], function () {
-		if (basicModal.visible() === true) basicModal.cancel();else if (visible.leftMenu()) leftMenu.close();else if (visible.contextMenu()) contextMenu.close();else if (visible.photo()) lychee.goto(album.getID());else if (visible.album() && !album.json.parent_id) lychee.goto();else if (visible.album()) lychee.goto(album.getParent());else if (visible.albums() && search.hash !== null) search.reset();else if (visible.mapview()) mapview.close();
+	Mousetrap.bindGlobal('enter', function () {
+		if (basicModal.visible() === true) {
+
+			// check if any of the input fields is focussed
+			// apply action, other do nothing
+			if ($('.signIn > input').is(':focus')) {
+				basicModal.action();
+				return false;
+			}
+		} else if (visible.photo() && !lychee.header_auto_hide && ($('img#image').is(':focus') || $('img#livephoto').is(':focus') || $(':focus').length === 0)) {
+			if (visible.header()) {
+				header.hide();
+			} else {
+				header.show();
+			}
+			return false;
+		}
+		$(':focus').each(function () {
+			$(this).click();
+		});
 		return false;
 	});
 
-	if (eventName === 'touchend') {
+	// Prevent 'esc keyup' event to trigger 'go back in history'
+	// and 'alt keyup' to show a webapp context menu for Fire TV
+	Mousetrap.bindGlobal(['esc', 'ContextMenu'], function () {
+		return false;
+	}, 'keyup');
 
-		$(document)
+	Mousetrap.bindGlobal(['esc', 'command+up'], function () {
+		if (basicModal.visible() === true) basicModal.cancel();else if (visible.leftMenu()) leftMenu.close();else if (visible.contextMenu()) contextMenu.close();else if (visible.photo()) lychee.goto(album.getID());else if (visible.album() && !album.json.parent_id) lychee.goto();else if (visible.album()) lychee.goto(album.getParent());else if (visible.albums() && search.hash !== null) search.reset();else if (visible.mapview()) mapview.close();else if (visible.albums() && lychee.enable_close_tab_on_esc) {
+			window.open("", "_self").close();
+		}
+		return false;
+	});
 
-		// Fullscreen on mobile
-		.on('touchend', '#imageview #image', function (e) {
+	$(document)
 
-			// prevent triggering event 'mousemove'
-			e.preventDefault();
+	// Fullscreen on mobile
+	.on('touchend', '#imageview #image', function (e) {
 
-			if (typeof swipe.obj === 'undefined' || Math.abs(swipe.offsetX) <= 5 && Math.abs(swipe.offsetY) <= 5) {
-				// Toogle header only if we're not moving to next/previous photo;
-				// In this case, swipe.preventNextHeaderToggle is set to true
-				if (typeof swipe.preventNextHeaderToggle === 'undefined' || !swipe.preventNextHeaderToggle) {
-					if (visible.header()) {
-						header.hide(e);
-					} else {
-						header.show();
-					}
+		// prevent triggering event 'mousemove'
+		e.preventDefault();
+
+		if (typeof swipe.obj === 'undefined' || Math.abs(swipe.offsetX) <= 5 && Math.abs(swipe.offsetY) <= 5) {
+			// Toggle header only if we're not moving to next/previous photo;
+			// In this case, swipe.preventNextHeaderToggle is set to true
+			if (typeof swipe.preventNextHeaderToggle === 'undefined' || !swipe.preventNextHeaderToggle) {
+				if (visible.header()) {
+					header.hide(e);
+				} else {
+					header.show();
 				}
-
-				// For next 'touchend', behave again as normal and toogle header
-				swipe.preventNextHeaderToggle = false;
 			}
-		});
-		$('#imageview')
-		// Swipe on mobile
-		.swipe().on('swipeStart', function () {
-			if (visible.photo()) swipe.start($('#imageview #image, #imageview #livephoto'));
-		}).swipe().on('swipeMove', function (e) {
-			if (visible.photo()) swipe.move(e.swipe);
-		}).swipe().on('swipeEnd', function (e) {
-			if (visible.photo()) swipe.stop(e.swipe, _photo.previous, _photo.next);
-		});
-	}
+
+			// For next 'touchend', behave again as normal and toggle header
+			swipe.preventNextHeaderToggle = false;
+		}
+	});
+	$('#imageview')
+	// Swipe on mobile
+	.swipe().on('swipeStart', function () {
+		if (visible.photo()) swipe.start($('#imageview #image, #imageview #livephoto'));
+	}).swipe().on('swipeMove', function (e) {
+		if (visible.photo()) swipe.move(e.swipe);
+	}).swipe().on('swipeEnd', function (e) {
+		if (visible.photo()) swipe.stop(e.swipe, _photo.previous, _photo.next);
+	});
 
 	// Document
 	$(document)
@@ -3185,6 +3435,12 @@ leftMenu.open = function () {
 	header.dom('.header__title').addClass('leftMenu__open');
 	loadingBar.dom().addClass('leftMenu__open');
 
+	// Make background unfocusable
+	tabindex.makeUnfocusable(header.dom());
+	tabindex.makeUnfocusable(lychee.content);
+	tabindex.makeFocusable(leftMenu._dom);
+	$('#button_signout').focus();
+
 	multiselect.unbind();
 };
 
@@ -3196,6 +3452,10 @@ leftMenu.close = function () {
 	$('.content').removeClass('leftMenu__open');
 	header.dom('.header__title').removeClass('leftMenu__open');
 	loadingBar.dom().removeClass('leftMenu__open');
+
+	tabindex.makeFocusable(header.dom());
+	tabindex.makeFocusable(lychee.content);
+	tabindex.makeUnfocusable(leftMenu._dom);
 
 	multiselect.bind();
 	lychee.load();
@@ -3409,9 +3669,30 @@ var lychee = {
 	location_decoding_caching_type: 'Harddisk', // caching mode for GPS data decoding
 	location_show: false, // show location name
 	location_show_public: false, // show location name for public albums
+	swipe_tolerance_x: 150, // tolerance for navigating when swiping images to the left and right on mobile
+	swipe_tolerance_y: 250, // tolerance for navigating when swiping images up and down
 
 	landing_page_enabled: false, // is landing page enabled ?
 	delete_imported: false,
+
+	// this is device specific config, in this case default is Desktop.
+	header_auto_hide: true,
+	active_focus_on_page_load: false,
+	enable_button_visibility: true,
+	enable_button_share: true,
+	enable_button_archive: true,
+	enable_button_move: true,
+	enable_button_trash: true,
+	enable_button_fullscreen: true,
+	enable_button_download: true,
+	enable_button_add: true,
+	enable_button_more: true,
+	enable_button_rotate: true,
+	enable_close_tab_on_esc: false,
+	enable_tabindex: false,
+	enable_contextmenu_header: true,
+	hide_content_during_imageview: false,
+	device_type: 'desktop',
 
 	checkForUpdates: '1',
 	update_json: 0,
@@ -3431,6 +3712,7 @@ var lychee = {
 	footer: $('#footer'),
 
 	locale: {}
+
 };
 
 lychee.diagnostics = function () {
@@ -3516,6 +3798,9 @@ lychee.init = function () {
 			header.applyTranslations();
 		}
 
+		var validatedSwipeToleranceX = data.config.swipe_tolerance_x && !isNaN(parseInt(data.config.swipe_tolerance_x)) && parseInt(data.config.swipe_tolerance_x) || 150;
+		var validatedSwipeToleranceY = data.config.swipe_tolerance_y && !isNaN(parseInt(data.config.swipe_tolerance_y)) && parseInt(data.config.swipe_tolerance_y) || 250;
+
 		// Check status
 		// 0 = No configuration
 		// 1 = Logged out
@@ -3545,6 +3830,8 @@ lychee.init = function () {
 			lychee.location_decoding_caching_type = !data.config.location_decoding_caching_type ? 'Harddisk' : data.config.location_decoding_caching_type;
 			lychee.location_show = data.config.location_show && data.config.location_show === '1' || false;
 			lychee.location_show_public = data.config.location_show_public && data.config.location_show_public === '1' || false;
+			lychee.swipe_tolerance_x = validatedSwipeToleranceX;
+			lychee.swipe_tolerance_y = validatedSwipeToleranceY;
 
 			lychee.default_license = data.config.default_license || 'none';
 			lychee.css = data.config.css || '';
@@ -3552,6 +3839,24 @@ lychee.init = function () {
 			lychee.downloadable = data.config.downloadable && data.config.downloadable === '1' || false;
 			lychee.share_button_visible = data.config.share_button_visible && data.config.share_button_visible === '1' || false;
 			lychee.delete_imported = data.config.delete_imported && data.config.delete_imported === '1';
+
+			lychee.header_auto_hide = data.config_device.header_auto_hide;
+			lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
+			lychee.enable_button_visibility = data.config_device.enable_button_visibility;
+			lychee.enable_button_share = data.config_device.enable_button_share;
+			lychee.enable_button_archive = data.config_device.enable_button_archive;
+			lychee.enable_button_move = data.config_device.enable_button_move;
+			lychee.enable_button_trash = data.config_device.enable_button_trash;
+			lychee.enable_button_fullscreen = data.config_device.enable_button_fullscreen;
+			lychee.enable_button_download = data.config_device.enable_button_download;
+			lychee.enable_button_add = data.config_device.enable_button_add;
+			lychee.enable_button_more = data.config_device.enable_button_more;
+			lychee.enable_button_rotate = data.config_device.enable_button_rotate;
+			lychee.enable_close_tab_on_esc = data.config_device.enable_close_tab_on_esc;
+			lychee.enable_tabindex = data.config_device.enable_tabindex;
+			lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header;
+			lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview;
+			lychee.device_type = data.config_device.device_type || 'desktop'; // we set default as Desktop
 
 			lychee.editor_enabled = data.config.editor_enabled && data.config.editor_enabled === '1' || false;
 
@@ -3591,6 +3896,26 @@ lychee.init = function () {
 			lychee.map_include_subalbums = data.config.map_include_subalbums && data.config.map_include_subalbums === '1' || false;
 			lychee.location_show = data.config.location_show && data.config.location_show === '1' || false;
 			lychee.location_show_public = data.config.location_show_public && data.config.location_show_public === '1' || false;
+			lychee.swipe_tolerance_x = validatedSwipeToleranceX;
+			lychee.swipe_tolerance_y = validatedSwipeToleranceY;
+
+			lychee.header_auto_hide = data.config_device.header_auto_hide;
+			lychee.active_focus_on_page_load = data.config_device.active_focus_on_page_load;
+			lychee.enable_button_visibility = data.config_device.enable_button_visibility;
+			lychee.enable_button_share = data.config_device.enable_button_share;
+			lychee.enable_button_archive = data.config_device.enable_button_archive;
+			lychee.enable_button_move = data.config_device.enable_button_move;
+			lychee.enable_button_trash = data.config_device.enable_button_trash;
+			lychee.enable_button_fullscreen = data.config_device.enable_button_fullscreen;
+			lychee.enable_button_download = data.config_device.enable_button_download;
+			lychee.enable_button_add = data.config_device.enable_button_add;
+			lychee.enable_button_more = data.config_device.enable_button_more;
+			lychee.enable_button_rotate = data.config_device.enable_button_rotate;
+			lychee.enable_close_tab_on_esc = data.config_device.enable_close_tab_on_esc;
+			lychee.enable_tabindex = data.config_device.enable_tabindex;
+			lychee.enable_contextmenu_header = data.config_device.enable_contextmenu_header;
+			lychee.hide_content_during_imgview = data.config_device.hide_content_during_imgview;
+			lychee.device_type = data.config_device.device_type || 'desktop'; // we set default as Desktop
 
 			// console.log(lychee.full_photo);
 			lychee.setMode('public');
@@ -3628,23 +3953,32 @@ lychee.login = function (data) {
 
 lychee.loginDialog = function () {
 
-	var msg = lychee.html(_templateObject46, lychee.locale['USERNAME'], lychee.locale['PASSWORD'], lychee.version, lychee.updateURL, lychee.locale['UPDATE_AVAILABLE']);
+	// Make background make unfocusable
+	tabindex.makeUnfocusable(header.dom());
+	tabindex.makeUnfocusable(lychee.content);
+	tabindex.makeUnfocusable(lychee.imageview);
+
+	var msg = lychee.html(_templateObject46, lychee.locale['USERNAME'], tabindex.get_next_tab_index(), lychee.locale['PASSWORD'], tabindex.get_next_tab_index(), lychee.version, lychee.updateURL, lychee.locale['UPDATE_AVAILABLE']);
 
 	basicModal.show({
 		body: msg,
 		buttons: {
 			action: {
 				title: lychee.locale['SIGN_IN'],
-				fn: lychee.login
+				fn: lychee.login,
+				attributes: [["data-tabindex", tabindex.get_next_tab_index()]]
 			},
 			cancel: {
 				title: lychee.locale['CANCEL'],
-				fn: basicModal.close
+				fn: basicModal.close,
+				attributes: [["data-tabindex", tabindex.get_next_tab_index()]]
 			}
 		}
 	});
 
 	if (lychee.checkForUpdates === '1') lychee.getUpdate();
+
+	tabindex.makeFocusable(basicModal.dom());
 };
 
 lychee.logout = function () {
@@ -3690,6 +4024,7 @@ lychee.load = function () {
 
 	contextMenu.close();
 	multiselect.close();
+	tabindex.reset();
 
 	if (hash[0] != null) albumID = hash[0];
 	if (hash[1] != null) photoID = hash[1];
@@ -3751,6 +4086,16 @@ lychee.load = function () {
 				album.load(albumID, true);
 			}
 			_photo.load(photoID, albumID, autoplay);
+
+			// Make imageview focussable
+			tabindex.makeFocusable(lychee.imageview);
+
+			// Make thumbnails unfocusable and store which element had focus
+			tabindex.makeUnfocusable(lychee.content, true);
+
+			// hide contentview if requested
+			if (lychee.hide_content_during_imgview) lychee.content.hide();
+
 			lychee.footer_hide();
 		}
 	} else if (albumID) {
@@ -3782,10 +4127,19 @@ lychee.load = function () {
 			_photo.json = null;
 
 			// Show Album
-			if (visible.photo()) view.photo.hide();
+			if (visible.photo()) {
+				view.photo.hide();
+				tabindex.makeUnfocusable(lychee.imageview);
+			}
 			if (visible.mapview()) mapview.close();
-			if (visible.sidebar() && album.isSmartID($albumID)) _sidebar.toggle();
-			if (album.json && albumID === album.json.id) view.album.title();else album.load(albumID);
+			if (visible.sidebar() && album.isSmartID(albumID)) _sidebar.toggle();
+			if (album.json && albumID === album.json.id) {
+				view.album.title();
+				lychee.content.show();
+				tabindex.makeFocusable(lychee.content, true);
+			} else {
+				album.load(albumID);
+			}
 			lychee.footer_show();
 		}
 	} else {
@@ -3805,7 +4159,10 @@ lychee.load = function () {
 		if (visible.sidebar()) _sidebar.toggle();
 
 		// Show Albums
-		if (visible.photo()) view.photo.hide();
+		if (visible.photo()) {
+			view.photo.hide();
+			tabindex.makeUnfocusable(lychee.imageview);
+		}
 		if (visible.mapview()) mapview.close();
 		lychee.content.show();
 		lychee.footer_show();
@@ -3970,8 +4327,10 @@ lychee.loadDropbox = function (callback) {
 
 lychee.getEventName = function () {
 
-	var touchendSupport = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || navigator.vendor || window.opera) && 'ontouchend' in document.documentElement;
-	return touchendSupport === true ? 'touchend' : 'click';
+	if (lychee.device_type === 'mobile') {
+		return 'touchend';
+	}
+	return 'click';
 };
 
 lychee.escapeHTML = function () {
@@ -4176,6 +4535,7 @@ lychee.clipboardCopy = function (text) {
 	// ? Promise.resolve()
 	// : Promise.reject(new DOMException('The request is not allowed', 'NotAllowedError'))
 };
+
 lychee.locale = {
 
 	'USERNAME': 'username',
@@ -4870,6 +5230,9 @@ mapview.close = function () {
 	lychee.animate($('#mapview'), 'fadeOut');
 	$('#mapview').hide();
 	header.setMode('album');
+
+	// Make album focussable
+	tabindex.makeFocusable(lychee.content);
 };
 
 mapview.goto = function (elem) {
@@ -5412,9 +5775,12 @@ _photo.load = function (photoID, albumID, autoplay) {
 		view.photo.init(autoplay);
 		lychee.imageview.show();
 
-		setTimeout(function () {
-			lychee.content.show();
-		}, 300);
+		if (!lychee.hide_content_during_imgview) {
+			setTimeout(function () {
+				lychee.content.show();
+				tabindex.makeUnfocusable(lychee.content);
+			}, 300);
+		}
 	});
 };
 
@@ -6257,7 +6623,7 @@ _photo.getArchive = function (photoIDs) {
 		if (myPhoto.url) {
 			msg += buildButton('FULL', lychee.locale['PHOTO_FULL'] + " (" + myPhoto.width + "x" + myPhoto.height + ", " + myPhoto.size + ")");
 		}
-		if (myPhoto.livePhotoUrl !== '') {
+		if (myPhoto.livePhotoUrl !== null) {
 			msg += buildButton('LIVEPHOTOVIDEO', "" + lychee.locale['PHOTO_LIVE_VIDEO']);
 		}
 		if (myPhoto.hasOwnProperty('medium2x') && myPhoto.medium2x !== '') {
@@ -7803,20 +8169,13 @@ function DecimalToDegreeMinutesSeconds(decimal, type) {
 var swipe = {
 
 	obj: null,
-	tolerance_X: 150,
-	tolerance_Y: 250,
 	offsetX: 0,
 	offsetY: 0,
 	preventNextHeaderToggle: false
-
 };
 
-swipe.start = function (obj, tolerance_X, tolerance_Y) {
-
+swipe.start = function (obj) {
 	if (obj) swipe.obj = obj;
-	if (tolerance_X) swipe.tolerance_X = tolerance_X;
-	if (tolerance_Y) swipe.tolerance_Y = tolerance_Y;
-
 	return true;
 };
 
@@ -7834,12 +8193,12 @@ swipe.move = function (e) {
 		swipe.offsetY = +1 * e.y;
 	}
 
+	var value = 'translate(' + swipe.offsetX + 'px, ' + swipe.offsetY + 'px)';
 	swipe.obj.css({
-		'WebkitTransform': 'translate(' + swipe.offsetX + 'px, ' + swipe.offsetY + 'px)',
-		'MozTransform': 'translate(' + swipe.offsetX + 'px, ' + swipe.offsetY + 'px)',
-		'transform': 'translate(' + swipe.offsetX + 'px, ' + swipe.offsetY + 'px)'
+		'WebkitTransform': value,
+		'MozTransform': value,
+		'transform': value
 	});
-
 	return;
 };
 
@@ -7850,13 +8209,13 @@ swipe.stop = function (e, left, right) {
 		return false;
 	}
 
-	if (e.y <= -swipe.tolerance_Y) {
+	if (e.y <= -lychee.swipe_tolerance_y) {
 
 		lychee.goto(album.getID());
-	} else if (e.y >= swipe.tolerance_Y) {
+	} else if (e.y >= lychee.swipe_tolerance_y) {
 
 		lychee.goto(album.getID());
-	} else if (e.x <= -swipe.tolerance_X) {
+	} else if (e.x <= -lychee.swipe_tolerance_x) {
 
 		left(true);
 
@@ -7864,7 +8223,7 @@ swipe.stop = function (e, left, right) {
 		// in case of moving to next image, we want to skip
 		// the toggling of the header
 		swipe.preventNextHeaderToggle = true;
-	} else if (e.x >= swipe.tolerance_X) {
+	} else if (e.x >= lychee.swipe_tolerance_x) {
 
 		right(true);
 
@@ -7873,11 +8232,11 @@ swipe.stop = function (e, left, right) {
 		// the toggling of the header
 		swipe.preventNextHeaderToggle = true;
 	} else {
-
+		var value = 'translate(0px, 0px)';
 		swipe.obj.css({
-			WebkitTransform: 'translate(0px, 0px)',
-			MozTransform: 'translate(0px, 0px)',
-			transform: 'translate(0px, 0px)'
+			WebkitTransform: value,
+			MozTransform: value,
+			transform: value
 		});
 	}
 
@@ -7888,6 +8247,106 @@ swipe.stop = function (e, left, right) {
 	return;
 };
 
+/**
+ * @description Helper class to manage tabindex
+ */
+
+var tabindex = {
+
+	offset_for_header: 100,
+	next_tab_index: 100
+
+};
+
+tabindex.saveSettings = function (elem) {
+	// Todo: Make shorter notation
+	// Get all elements which have a tabindex
+	var tmp = $(elem).find("[tabindex]");
+
+	// iterate over all elements and set tabindex to stored value (i.e. make is not focussable)
+	tmp.each(function (i, e) {
+		// TODO: shorter notation
+		a = $(e).attr("tabindex");
+		$(this).data("tabindex-saved", a);
+	});
+};
+
+tabindex.restoreSettings = function (elem) {
+
+	if (!lychee.enable_tabindex) return;
+
+	// Todo: Make shorter noation
+	// Get all elements which have a tabindex
+	var tmp = $(elem).find("[tabindex]");
+
+	// iterate over all elements and set tabindex to stored value (i.e. make is not focussable)
+	tmp.each(function (i, e) {
+		// TODO: shorter notation
+		a = $(e).data("tabindex-saved");
+		$(e).attr("tabindex", a);
+	});
+};
+
+tabindex.makeUnfocusable = function (elem) {
+	var saveFocusElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+
+	// Todo: Make shorter noation
+	// Get all elements which have a tabindex
+	var tmp = $(elem).find("[tabindex]");
+
+	// iterate over all elements and set tabindex to -1 (i.e. make is not focussable)
+	tmp.each(function (i, e) {
+		$(e).attr("tabindex", "-1");
+		// Save which element had focus before we make it unfocusable
+		if (saveFocusElement && $(e).is(":focus")) {
+			$(e).data("tabindex-focus", true);
+			// Remove focus
+			$(e).blur();
+		}
+	});
+
+	// Disable input fields
+	$(elem).find("input").attr("disabled", "disabled");
+};
+
+tabindex.makeFocusable = function (elem) {
+	var restoreFocusElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+
+	if (!lychee.enable_tabindex) return;
+
+	// Todo: Make shorter noation
+	// Get all elements which have a tabindex
+	var tmp = $(elem).find("[data-tabindex]");
+
+	// iterate over all elements and set tabindex to stored value (i.e. make is not focussable)
+	tmp.each(function (i, e) {
+		$(e).attr("tabindex", $(e).data("tabindex"));
+		// restore focus elemente if wanted
+		if (restoreFocusElement) {
+			if ($(e).data("tabindex-focus") && lychee.active_focus_on_page_load) {
+				$(e).focus();
+				$(e).removeData("tabindex-focus");
+			}
+		}
+	});
+
+	// Enable input fields
+	$(elem).find("input").removeAttr("disabled");
+};
+
+tabindex.get_next_tab_index = function () {
+
+	tabindex.next_tab_index = tabindex.next_tab_index + 1;
+
+	return tabindex.next_tab_index - 1;
+};
+
+tabindex.reset = function () {
+
+	tabindex.next_tab_index = tabindex.offset_for_header;
+};
 /**
  * @description Takes care of every action an album can handle and execute.
  */
@@ -9126,14 +9585,16 @@ view.photo = {
 		$(document).bind('mousemove', function () {
 			clearTimeout(timeout);
 			// For live Photos: header animtion only if LivePhoto is not playing
-			if (!_photo.isLivePhotoPlaying()) {
+			if (!_photo.isLivePhotoPlaying() && lychee.header_auto_hide) {
 				header.show();
 				timeout = setTimeout(header.hideIfLivePhotoNotPlaying, 2500);
 			}
 		});
 
 		// we also put this timeout to enable it by default when you directly click on a picture.
-		setTimeout(header.hideIfLivePhotoNotPlaying, 2500);
+		if (lychee.header_auto_hide) {
+			setTimeout(header.hideIfLivePhotoNotPlaying, 2500);
+		}
 
 		lychee.animate(lychee.imageview, 'fadeIn');
 	},
@@ -9177,7 +9638,7 @@ view.photo = {
 		var license = void 0;
 
 		// Process key to display correct string
-		switch (album.json.license) {
+		switch (_photo.json.license) {
 			case 'none':
 				license = ''; // none is displayed as - thus is empty (uniformity of the display).
 				break;
@@ -9237,6 +9698,7 @@ view.photo = {
 
 		var ret = build.imageview(_photo.json, visible.header(), autoplay);
 		lychee.imageview.html(ret.html);
+		tabindex.makeFocusable(lychee.imageview);
 
 		// Init Live Photo if needed
 		if (_photo.isLivePhoto()) {
@@ -9474,7 +9936,7 @@ view.settings = {
 		},
 
 		setDefaultLicense: function setDefaultLicense() {
-			var msg = "\n\t\t\t<div class=\"setDefaultLicense\">\n\t\t\t<p>" + lychee.locale['DEFAULT_LICENSE'] + "\n\t\t\t<span class=\"select\" style=\"width:270px\">\n\t\t\t\t<select name=\"license\" id=\"license\">\n\t\t\t\t\t<option value=\"none\">" + lychee.locale['PHOTO_LICENSE_NONE'] + "</option>\n\t\t\t\t\t<option value=\"reserved\">" + lychee.locale['PHOTO_RESERVED'] + "</option>\n\t\t\t\t\t<option value=\"CC0\">CC0 - Public Domain</option>\n\t\t\t\t\t<option value=\"CC-BY\">CC Attribution 4.0</option>\n\t\t\t\t\t<option value=\"CC-BY-ND\">CC Attribution-NoDerivatives 4.0</option>\n\t\t\t\t\t<option value=\"CC-BY-SA\">CC Attribution-ShareAlike 4.0</option>\n\t\t\t\t\t<option value=\"CC-BY-NC\">CC Attribution-NonCommercial 4.0</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-ND\">CC Attribution-NonCommercial-NoDerivatives 4.0</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-SA\">CC Attribution-NonCommercial-ShareAlike 4.0</option>\n\t\t\t\t</select>\n\t\t\t</span>\n\t\t\t<br />\n\t\t\t<a href=\"https://creativecommons.org/choose/\" target=\"_blank\">" + lychee.locale['PHOTO_LICENSE_HELP'] + "</a>\n\t\t\t</p>\n\t\t\t<div class=\"basicModal__buttons\">\n\t\t\t\t<a id=\"basicModal__action_set_license\" class=\"basicModal__button\">" + lychee.locale['SET_LICENSE'] + "</a>\n\t\t\t</div>\n\t\t\t</div>\n\t\t\t";
+			var msg = "\n\t\t\t<div class=\"setDefaultLicense\">\n\t\t\t<p>" + lychee.locale['DEFAULT_LICENSE'] + "\n\t\t\t<span class=\"select\" style=\"width:270px\">\n\t\t\t\t<select name=\"license\" id=\"license\">\n\t\t\t\t\t<option value=\"none\">" + lychee.locale['PHOTO_LICENSE_NONE'] + "</option>\n\t\t\t\t\t<option value=\"reserved\">" + lychee.locale['PHOTO_RESERVED'] + "</option>\n\t\t\t\t\t<option value=\"CC0\">CC0 - Public Domain</option>\n\t\t\t\t\t<option value=\"CC-BY-1.0\">CC Attribution 1.0</option>\n\t\t\t\t\t<option value=\"CC-BY-2.0\">CC Attribution 2.0</option>\n\t\t\t\t\t<option value=\"CC-BY-2.5\">CC Attribution 2.5</option>\n\t\t\t\t\t<option value=\"CC-BY-3.0\">CC Attribution 3.0</option>\n\t\t\t\t\t<option value=\"CC-BY-4.0\">CC Attribution 4.0</option>\n\t\t\t\t\t<option value=\"CC-BY-ND-1.0\">CC Attribution-NoDerivatives 1.0</option>\n\t\t\t\t\t<option value=\"CC-BY-ND-2.0\">CC Attribution-NoDerivatives 2.0</option>\n\t\t\t\t\t<option value=\"CC-BY-ND-2.5\">CC Attribution-NoDerivatives 2.5</option>\n\t\t\t\t\t<option value=\"CC-BY-ND-3.0\">CC Attribution-NoDerivatives 3.0</option>\n\t\t\t\t\t<option value=\"CC-BY-ND-4.0\">CC Attribution-NoDerivatives 4.0</option>\n\t\t\t\t\t<option value=\"CC-BY-SA-1.0\">CC Attribution-ShareAlike 1.0</option>\n\t\t\t\t\t<option value=\"CC-BY-SA-2.0\">CC Attribution-ShareAlike 2.0</option>\n\t\t\t\t\t<option value=\"CC-BY-SA-2.5\">CC Attribution-ShareAlike 2.5</option>\n\t\t\t\t\t<option value=\"CC-BY-SA-3.0\">CC Attribution-ShareAlike 3.0</option>\n\t\t\t\t\t<option value=\"CC-BY-SA-4.0\">CC Attribution-ShareAlike 4.0</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-1.0\">CC Attribution-NonCommercial 1.0</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-2.0\">CC Attribution-NonCommercial 2.0</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-2.5\">CC Attribution-NonCommercial 2.5</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-3.0\">CC Attribution-NonCommercial 3.0</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-4.0\">CC Attribution-NonCommercial 4.0</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-ND-1.0\">CC Attribution-NonCommercial-NoDerivatives 1.0</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-ND-2.0\">CC Attribution-NonCommercial-NoDerivatives 2.0</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-ND-2.5\">CC Attribution-NonCommercial-NoDerivatives 2.5</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-ND-3.0\">CC Attribution-NonCommercial-NoDerivatives 3.0</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-ND-4.0\">CC Attribution-NonCommercial-NoDerivatives 4.0</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-SA-1.0\">CC Attribution-NonCommercial-ShareAlike 1.0</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-SA-2.0\">CC Attribution-NonCommercial-ShareAlike 2.0</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-SA-2.5\">CC Attribution-NonCommercial-ShareAlike 2.5</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-SA-3.0\">CC Attribution-NonCommercial-ShareAlike 3.0</option>\n\t\t\t\t\t<option value=\"CC-BY-NC-SA-4.0\">CC Attribution-NonCommercial-ShareAlike 4.0</option>\n\t\t\t\t</select>\n\t\t\t</span>\n\t\t\t<br />\n\t\t\t<a href=\"https://creativecommons.org/choose/\" target=\"_blank\">" + lychee.locale['PHOTO_LICENSE_HELP'] + "</a>\n\t\t\t</p>\n\t\t\t<div class=\"basicModal__buttons\">\n\t\t\t\t<a id=\"basicModal__action_set_license\" class=\"basicModal__button\">" + lychee.locale['SET_LICENSE'] + "</a>\n\t\t\t</div>\n\t\t\t</div>\n\t\t\t";
 			$(".settings_view").append(msg);
 			$('select#license').val(lychee.default_license === '' ? 'none' : lychee.default_license);
 			settings.bind('#basicModal__action_set_license', '.setDefaultLicense', settings.setDefaultLicense);

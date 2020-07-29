@@ -396,17 +396,8 @@ class AlbumController extends Controller
 			return 'false';
 		}
 
-		$licenses = [
-			'none',
-			'reserved',
-			'CC0',
-			'CC-BY',
-			'CC-BY-ND',
-			'CC-BY-SA',
-			'CC-BY-ND',
-			'CC-BY-NC-ND',
-			'CC-BY-NC-SA',
-		];
+		$licenses = Helpers::get_all_licenses();
+
 		$found = false;
 		$i = 0;
 		while (!$found && $i < count($licenses)) {
@@ -587,7 +578,7 @@ class AlbumController extends Controller
 
 				// just to be sure to handle ownership changes in the process.
 				$album->owner_id = $album_master->owner_id;
-				$no_error &= $this->albumFunctions->setContentsOwner($album->id, $album_master->owner_id);
+				$no_error &= $this->albumFunctions->setContentsOwner([$album->id], $album_master->owner_id);
 			} else {
 				$album->parent_id = null;
 			}
