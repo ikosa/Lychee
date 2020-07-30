@@ -57,7 +57,6 @@ use Storage;
  * @property string      $livePhotoChecksum
  * @property Album|null  $album
  * @property User        $owner
- * @property string      $rawUrl
  *
  * @method static Builder|Photo newModelQuery()
  * @method static Builder|Photo newQuery()
@@ -383,13 +382,6 @@ class Photo extends Model
 					$error = true;
 				}
 			}
-			
-			// Delete raw ******************************************************************************************** added
-			if (Storage::exists('raw/' . $this->rawUrl) && !Storage::delete('raw/' . $this->rawUrl)) {
-				Logs::error(__METHOD__, __LINE__, 'Could not delete photo in uploads/raw/');
-				$error = true;
-			}
-			// ******************************************************************************************************* added end
 
 			// Delete medium
 			// TODO: USE STORAGE FOR DELETE
