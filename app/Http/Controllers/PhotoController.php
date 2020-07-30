@@ -657,12 +657,6 @@ class PhotoController extends Controller
 				$path = 'thumb/' . $photo->thumbUrl;
 				$kind = '-200x200';
 				break;
-			// ************************************************************************ added
-			case 'RAW':
-				$path = 'raw/' . $photo->rawUrl;
-				$kind = '';
-				break;
-			// ************************************************************************ added end
 			default:
 				Logs::error(
 					__METHOD__,
