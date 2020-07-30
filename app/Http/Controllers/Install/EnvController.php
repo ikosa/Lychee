@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Install;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use PanicAttack;
 
 class EnvController extends Controller
 {
@@ -28,12 +27,7 @@ class EnvController extends Controller
 
 		if ($request->has('envConfig')) {
 			$env = str_replace("\r", '', $request->get('envConfig'));
-			try {
-				file_put_contents(base_path('.env'), $env, LOCK_EX);
-			} catch (\Exception $e) {
-				$oups = new PanicAttack();
-				$oups->handle($e->getMessage());
-			}
+			file_put_contents(base_path('.env'), $env, LOCK_EX);
 			$exists = true;
 		}
 

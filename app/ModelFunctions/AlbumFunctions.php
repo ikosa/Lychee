@@ -177,13 +177,10 @@ class AlbumFunctions
 		});
 	}
 
-	public function set_thumbs_children(BaseCollection &$return, BaseCollection $thumbs)
+	public function set_thumbs_children(array &$return, BaseCollection $thumbs)
 	{
 		$thumbs->each(function (BaseCollection $subthumb, $key) use (&$return) {
-			$mod = $return[$key];
-			$this->set_thumbs_children($mod['albums'], $subthumb[1]);
-			$this->set_thumbs($mod, $subthumb);
-			$return[$key] = $mod;
+			$this->set_thumbs($return[$key], $subthumb);
 		});
 	}
 
