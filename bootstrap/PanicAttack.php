@@ -98,20 +98,6 @@ class PanicAttack
 		$this->displaySimpleError();
 	}
 
-	/*
-	 |--------------------------------------------------------------------------
-	 | Catch error on missing access rights.
-	 |--------------------------------------------------------------------------
-	 */
-	public function checkAccessRightsEnv()
-	{
-		$this->title = 'Invalid access rights';
-		$this->code = 503;
-		$this->message = '<code>.env</code> is not writable.<br>
-		Please set the proper access rights.';
-		$this->displaySimpleError();
-	}
-
 	/**
 	 *  dispatcher.
 	 */
@@ -120,7 +106,6 @@ class PanicAttack
 		$handling = [
 			'composerVendorNotFound' => ['require', 'Failed opening required', 'vendor/autoload.php'],
 			'checkAccessRightsViews' => ['file_put_contents', 'storage/framework/views', 'Permission denied'],
-			'checkAccessRightsEnv' => ['file_put_contents', '.env'],
 		];
 
 		foreach ($handling as $fun => $needles) {
@@ -137,3 +122,4 @@ class PanicAttack
 		// $this->displaySimpleError();
 	}
 }
+

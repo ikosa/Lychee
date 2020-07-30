@@ -41,7 +41,6 @@ final class PermissionsController extends Controller
 			'step' => 2,
 			'permissions' => $perms['permissions'],
 			'errors' => $perms['errors'],
-			'windows' => $this->permissions->is_win(),
 		]);
 	}
 }

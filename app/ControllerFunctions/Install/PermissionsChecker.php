@@ -21,21 +21,13 @@ class PermissionsChecker
 	}
 
 	/**
-	 * Return true if we are stupid enough to use Windows.
-	 */
-	public function is_win(): bool
-	{
-		return strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
-	}
-
-	/**
 	 * Check for the folders permissions.
 	 *
 	 * @param array $folders
 	 *
 	 * @return array
 	 */
-	public function check(array $folders): array
+	public function check(array $folders)
 	{
 		foreach ($folders as $folder => $permission) {
 			$this->addFile($folder, $permission, $this->getPermission($folder, $permission));
@@ -52,14 +44,13 @@ class PermissionsChecker
 	 *
 	 * @return int the position of 1 determines the errors
 	 */
-	private function getPermission(string $folder, string $permissions): int
+	private function getPermission(string $folder, string $permissions)
 	{
 		$return = 0;
 		foreach (explode('|', $permissions) as $permission) {
 			preg_match('/(!*)(.*)/', $permission, $f);
 			$return <<= 1;
-			// we overwrite the value if windows and executable check.
-			$return |= ($f[2] === 'is_executable' && $this->is_win()) ? 0 : !($f[2](base_path($folder)) xor ($f[1] == '!'));
+			$return |= !($f[2](base_path($folder)) xor ($f[1] == '!'));
 		}
 
 		return $return;
@@ -91,7 +82,7 @@ class PermissionsChecker
 	/**
 	 *  map.
 	 */
-	private function map_perm_set($permissions, $areSet): array
+	private function map_perm_set($permissions, $areSet)
 	{
 		$array_permission = array_reverse(explode('|', $permissions));
 		$ret = [];
