@@ -209,54 +209,11 @@ class PhotoFunctions
 
 		// Set paths
 		$tmp_name = $file['tmp_name'];
-		$photo_name = str_replace("/var/www/html/Lychee/public/uploads/big/", "", $tmp_name);// changed <- $photo_name = md5(microtime()) . $extension;
+		$photo_name = md5(microtime()) . $extension;
 
 		$path_prefix = $kind != 'raw' ? 'big/' : 'raw/';
 		$path = Storage::path($path_prefix . $photo_name);
-		
-		// ************************************* added to handle raw+jpeg *******************************
-		if ($kind == 'raw') {
-			// check if jpeg pair exists
-			$pathinfo = pathinfo($file['tmp_name']);
-			$filenameNoExt = $pathinfo['dirname']."/".$pathinfo['filename'];
-			
-			// TODO change this logic with glob
-			if (is_file($filenameNoExt. ".jpeg") || is_file($filenameNoExt. ".Jpeg") || is_file($filenameNoExt. ".JPEG") || is_file($filenameNoExt. ".jpg") || is_file($filenameNoExt. ".Jpg") || is_file($filenameNoExt. ".JPG")) {
-				Logs::notice(__METHOD__, __LINE__, 'RAW+JPEG found:'. $file['tmp_name']. " skipping file");
-				return true;
-			}
-		}
-		
-		if ($kind == 'photo') {
-			// check if raw pair exists
-			$pathinfo = pathinfo($file['tmp_name']);
-			$filenameNoExt = $pathinfo['dirname']."/".$pathinfo['filename'];
-			
-			$raw_formats = strtolower(Configs::get_value('raw_formats', ''));
-			$matches = glob($filenameNoExt. ".*");
-			
-			foreach ($matches as $val) {
-				if (in_array(".". strtolower(pathinfo($val,PATHINFO_EXTENSION)), explode('|', $raw_formats), true) ) {
-					Logs::notice(__METHOD__, __LINE__, 'RAW+JPEG found:'. $file['tmp_name']); 
-					
-					$raw_name = str_replace("/var/www/html/Lychee/public/uploads/big/", "", $val);
-					$raw_path = Storage::path("raw/" . $raw_name);
-					// check if dir exists
-					$dir = pathinfo($raw_path, PATHINFO_DIRNAME); 
-					if (!is_dir($dir)) {
-						mkdir($dir, 0777, true);
-					}
-					// move file to raw folder
-					if (!@rename($val, $raw_path)) {
-						Logs::error(__METHOD__, __LINE__,'Cannot move file from:'. $val. ' to:'. $raw_path);
-					} else {
-						$photo->rawUrl = $raw_name;
-					}
-				}
-			}
-		}
-		// *********************************************************************************************** added end
-			
+
 		// Calculate checksum
 		$checksum = sha1_file($tmp_name);
 		if ($checksum === false) {
@@ -288,7 +245,6 @@ class PhotoFunctions
 
 		if ($exists === false) {
 			// Import if not uploaded via web
-			$delete_imported = false; // **********************************************************************added
 			if (!is_uploaded_file($tmp_name)) {
 				// TODO: use the storage facade here
 				// Check if the user wants to create symlinks instead of copying the photo
@@ -300,13 +256,11 @@ class PhotoFunctions
 						return Response::error('Could not create symlink!');
 						// @codeCoverageIgnoreEnd
 					}
-				// this part commeted out to keep photos at the orj location ******************************changed
-				// TODO move files if they are not in big/
-				/*} elseif (!@copy($tmp_name, $path)) {
+				} elseif (!@copy($tmp_name, $path)) {
 					// @codeCoverageIgnoreStart
 					Logs::error(__METHOD__, __LINE__, 'Could not copy photo to uploads');
 
-					return Response::error('Could not copy photo to uploads!');*/
+					return Response::error('Could not copy photo to uploads!');
 				// @codeCoverageIgnoreEnd
 				} elseif ($delete_imported) {
 					@unlink($tmp_name);
@@ -457,8 +411,7 @@ class PhotoFunctions
 
 				if ($kind == 'raw') {
 					try {
-						// TODO must think about what happens when there is just raw
-						//$frame_tmp = $this->createJpgFromRaw($photo);*****************************commeted out because do not need smaller images for jpeg+raw setup
+						$frame_tmp = $this->createJpgFromRaw($photo);
 					} catch (Exception $exception) {
 						Logs::error(__METHOD__, __LINE__, $exception->getMessage());
 					}
@@ -475,7 +428,7 @@ class PhotoFunctions
 						return Response::error('Could not create thumbnail for photo!');
 					}
 
-					$photo->thumbUrl = dirname($photo->url).'/'.basename($photo->url, $extension). '.jpeg';// **************** changed <- $photo->thumbUrl = basename($photo_name, $extension) . '.jpeg';
+					$photo->thumbUrl = basename($photo_name, $extension) . '.jpeg';
 
 					$this->createSmallerImages($photo, $frame_tmp);
 
@@ -640,15 +593,6 @@ class PhotoFunctions
 
 		$src = ($frame_tmp === '') ? Storage::path('big/' . $photo->url) : $frame_tmp;
 		$photoName = explode('.', $photo->url);
-		
-		// ************************************************************************* added to create dirs
-		$path = pathinfo($photo->url, PATHINFO_DIRNAME); 
-		$path = Storage::path('thumb/'. $path);
-		if (!is_dir($path)) {
-			mkdir($path, 0777, true);
-		}
-		// ************************************************************************* added end
-		
 		$this->imageHandler->crop(
 			$src,
 			Storage::path('thumb/' . $photoName[0] . '.jpeg'),
@@ -779,14 +723,6 @@ class PhotoFunctions
 		}
 
 		$uploadFolder = Storage::path(strtolower($pathType) . '/');
-		
-		// ************************************************************************* added to create dirs
-		$path = pathinfo($uploadFolder.'/'.$photo->url, PATHINFO_DIRNAME); 
-		if (!is_dir($path)) {
-			mkdir($path, 0777, true);
-		}
-		// ************************************************************************* added end
-		
 		if (Helpers::hasPermissions($uploadFolder) === false) {
 			Logs::notice(__METHOD__, __LINE__, 'Skipped creation of medium-photo, because ' . $uploadFolder . ' is missing or not readable and writable.');
 
